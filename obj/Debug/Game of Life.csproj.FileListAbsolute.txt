@@ -1,0 +1,10 @@
+E:\Project and Portolio 1\Game of Life\bin\Debug\Game of Life.exe.config
+E:\Project and Portolio 1\Game of Life\bin\Debug\Game of Life.exe
+E:\Project and Portolio 1\Game of Life\bin\Debug\Game of Life.pdb
+E:\Project and Portolio 1\Game of Life\obj\Debug\Game of Life.csprojAssemblyReference.cache
+E:\Project and Portolio 1\Game of Life\obj\Debug\Game_of_Life.Form1.resources
+E:\Project and Portolio 1\Game of Life\obj\Debug\Game_of_Life.Properties.Resources.resources
+E:\Project and Portolio 1\Game of Life\obj\Debug\Game of Life.csproj.GenerateResource.cache
+E:\Project and Portolio 1\Game of Life\obj\Debug\Game of Life.csproj.CoreCompileInputs.cache
+E:\Project and Portolio 1\Game of Life\obj\Debug\Game of Life.exe
+E:\Project and Portolio 1\Game of Life\obj\Debug\Game of Life.pdb

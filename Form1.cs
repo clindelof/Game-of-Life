@@ -13,7 +13,7 @@ namespace Game_of_Life
     public partial class Form1 : Form
     {
         // The universe array
-        bool[,] universe = new bool[30, 30];
+        bool[,] universe = new bool[5, 5];
 
         // Drawing colors
         Color gridColor = Color.Black;
@@ -119,19 +119,5 @@ namespace Game_of_Life
             }
         }
 
-        private void toolsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void viewToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void toolStripStatusLabel1_Click(object sender, EventArgs e)
-        {
-
-        }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlTypes;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -32,7 +33,6 @@ namespace Game_of_Life
             // Setup the timer
             timer.Interval = Properties.Settings.Default.interval; // milliseconds
             timer.Tick += Timer_Tick;
-            timer.Enabled = true; // start timer running
 
             toolStripStatusLabelInterval.Text = "Interval: " + Properties.Settings.Default.interval;
         }
@@ -120,9 +120,31 @@ namespace Game_of_Life
                 graphicsPanel1.Invalidate();
             }
         }
-        private void toolsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
 
+        private void runButtonClick(object sender, EventArgs e)
+        {
+            timer.Enabled = true;
+            Run.Enabled = false;
+            Pause.Enabled = true;
+            Next.Enabled = false;
+        }
+
+        private void pauseButtonClick(object sender, EventArgs e)
+        {
+            timer.Stop();
+
+            Run.Enabled = true;
+            Pause.Enabled = false;
+            Next.Enabled = true;
+        }
+
+        private void nextButtonClick(object sender, EventArgs e)
+        {
+            NextGeneration();
+        }
+
+        private void toolsToolStripMenuItem_Click(object sender, EventArgs e)
+        { 
         }
 
         private void viewToolStripMenuItem_Click(object sender, EventArgs e)

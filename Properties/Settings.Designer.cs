@@ -23,30 +23,51 @@ namespace Game_of_Life.Properties {
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("100")]
         public int interval {
             get {
                 return ((int)(this["interval"]));
             }
+            set {
+                this["interval"] = value;
+            }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("15")]
         public int universe_width {
             get {
                 return ((int)(this["universe_width"]));
             }
+            set {
+                this["universe_width"] = value;
+            }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("15")]
         public int universe_height {
             get {
                 return ((int)(this["universe_height"]));
+            }
+            set {
+                this["universe_height"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1216548446")]
+        public int seed {
+            get {
+                return ((int)(this["seed"]));
+            }
+            set {
+                this["seed"] = value;
             }
         }
     }

@@ -36,6 +36,7 @@ namespace Game_of_Life
             timer.Tick += Timer_Tick;
 
             toolStripStatusLabelInterval.Text = "Interval: " + Properties.Settings.Default.interval;
+            toolStripStatusLabelSeed.Text = "Seed: " + Properties.Settings.Default.seed;
         }
 
         private void clearUniverse(object sender, EventArgs e) 
@@ -47,14 +48,30 @@ namespace Game_of_Life
         {
             OptionsModal optionsModal = new OptionsModal();
 
-            optionsModal.timerInterval.Text = Properties.Settings.Default.interval.ToString();
-            optionsModal.universeWidth.Text = Properties.Settings.Default.universe_width.ToString();
-            optionsModal.universeHeight.Text = Properties.Settings.Default.universe_height.ToString();
+            optionsModal.interval.Value = Properties.Settings.Default.interval;
+            optionsModal.universeWidth.Value = Properties.Settings.Default.universe_width;
+            optionsModal.universeHeight.Value = Properties.Settings.Default.universe_height;
 
             if (DialogResult.OK == optionsModal.ShowDialog())
             {
-                //if ok is clicked;
+                Properties.Settings.Default.interval = (int) optionsModal.interval.Value;
+                Properties.Settings.Default.universe_width = (int) optionsModal.universeWidth.Value;
+                Properties.Settings.Default.universe_height = (int) optionsModal.universeHeight.Value;
+
+                Properties.Settings.Default.Save();
+
+                updateOptionValues();
             }
+        }
+
+        private void updateOptionValues()
+        {
+            universe = new bool[Properties.Settings.Default.universe_height, Properties.Settings.Default.universe_width];
+            
+            timer.Interval = Properties.Settings.Default.interval;
+            toolStripStatusLabelInterval.Text = "Interval: " + Properties.Settings.Default.interval;
+
+            graphicsPanel1.Invalidate();
         }
 
         // Calculate the next generation of cells

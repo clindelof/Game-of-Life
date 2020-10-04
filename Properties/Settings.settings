@@ -2,14 +2,17 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Game_of_Life.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="interval" Type="System.Int32" Scope="Application">
+    <Setting Name="interval" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">100</Value>
     </Setting>
-    <Setting Name="universe_width" Type="System.Int32" Scope="Application">
+    <Setting Name="universe_width" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">15</Value>
     </Setting>
-    <Setting Name="universe_height" Type="System.Int32" Scope="Application">
+    <Setting Name="universe_height" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">15</Value>
+    </Setting>
+    <Setting Name="seed" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1216548446</Value>
     </Setting>
   </Settings>
 </SettingsFile>

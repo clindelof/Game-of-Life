@@ -31,11 +31,14 @@
             this.cancel = new System.Windows.Forms.Button();
             this.ok = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
-            this.timerInterval = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.universeWidth = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.universeHeight = new System.Windows.Forms.TextBox();
+            this.interval = new System.Windows.Forms.NumericUpDown();
+            this.universeWidth = new System.Windows.Forms.NumericUpDown();
+            this.universeHeight = new System.Windows.Forms.NumericUpDown();
+            ((System.ComponentModel.ISupportInitialize)(this.interval)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.universeWidth)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.universeHeight)).BeginInit();
             this.SuspendLayout();
             // 
             // cancel
@@ -70,14 +73,6 @@
             this.label1.Text = "Timer Interval in Milliseconds";
             this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
-            // timerInterval
-            // 
-            this.timerInterval.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.timerInterval.Location = new System.Drawing.Point(231, 103);
-            this.timerInterval.Name = "timerInterval";
-            this.timerInterval.Size = new System.Drawing.Size(151, 23);
-            this.timerInterval.TabIndex = 3;
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -87,14 +82,6 @@
             this.label2.Size = new System.Drawing.Size(169, 17);
             this.label2.TabIndex = 4;
             this.label2.Text = "Width of Universe in Cells";
-            // 
-            // universeWidth
-            // 
-            this.universeWidth.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.universeWidth.Location = new System.Drawing.Point(231, 135);
-            this.universeWidth.Name = "universeWidth";
-            this.universeWidth.Size = new System.Drawing.Size(151, 22);
-            this.universeWidth.TabIndex = 5;
             // 
             // label3
             // 
@@ -106,13 +93,26 @@
             this.label3.TabIndex = 6;
             this.label3.Text = "Height of Universe in Cells";
             // 
+            // interval
+            // 
+            this.interval.Location = new System.Drawing.Point(231, 103);
+            this.interval.Name = "interval";
+            this.interval.Size = new System.Drawing.Size(120, 20);
+            this.interval.TabIndex = 7;
+            // 
+            // universeWidth
+            // 
+            this.universeWidth.Location = new System.Drawing.Point(231, 135);
+            this.universeWidth.Name = "universeWidth";
+            this.universeWidth.Size = new System.Drawing.Size(120, 20);
+            this.universeWidth.TabIndex = 8;
+            // 
             // universeHeight
             // 
-            this.universeHeight.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.universeHeight.Location = new System.Drawing.Point(231, 166);
             this.universeHeight.Name = "universeHeight";
-            this.universeHeight.Size = new System.Drawing.Size(151, 22);
-            this.universeHeight.TabIndex = 7;
+            this.universeHeight.Size = new System.Drawing.Size(120, 20);
+            this.universeHeight.TabIndex = 9;
             // 
             // OptionsModal
             // 
@@ -123,10 +123,10 @@
             this.CancelButton = this.cancel;
             this.ClientSize = new System.Drawing.Size(419, 318);
             this.Controls.Add(this.universeHeight);
-            this.Controls.Add(this.label3);
             this.Controls.Add(this.universeWidth);
+            this.Controls.Add(this.interval);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.timerInterval);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.ok);
             this.Controls.Add(this.cancel);
@@ -139,6 +139,9 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Options";
             this.Load += new System.EventHandler(this.OptionsModal_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.interval)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.universeWidth)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.universeHeight)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -151,8 +154,8 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
-        public System.Windows.Forms.TextBox timerInterval;
-        public System.Windows.Forms.TextBox universeWidth;
-        public System.Windows.Forms.TextBox universeHeight;
+        public System.Windows.Forms.NumericUpDown interval;
+        public System.Windows.Forms.NumericUpDown universeWidth;
+        public System.Windows.Forms.NumericUpDown universeHeight;
     }
 }

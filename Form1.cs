@@ -38,6 +38,11 @@ namespace Game_of_Life
             toolStripStatusLabelInterval.Text = "Interval: " + Properties.Settings.Default.interval;
         }
 
+        private void clearUniverse(object sender, EventArgs e) 
+        {
+            universe = new bool[Properties.Settings.Default.universe_height, Properties.Settings.Default.universe_width];
+        }
+
         private void optionsMenuItem_click(object sender, EventArgs e)
         {
             OptionsModal optionsModal = new OptionsModal();

@@ -31,5 +31,23 @@ namespace Game_of_Life.Properties {
                 return ((int)(this["interval"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("15")]
+        public int universe_width {
+            get {
+                return ((int)(this["universe_width"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("15")]
+        public int universe_height {
+            get {
+                return ((int)(this["universe_height"]));
+            }
+        }
     }
 }

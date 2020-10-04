@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -14,7 +15,7 @@ namespace Game_of_Life
     public partial class Form1 : Form
     {
         // The universe array
-        bool[,] universe = new bool[5, 5];
+        bool[,] universe = new bool[Properties.Settings.Default.universe_height, Properties.Settings.Default.universe_width ];
 
         // Drawing colors
         Color gridColor = Color.Black;
@@ -35,6 +36,20 @@ namespace Game_of_Life
             timer.Tick += Timer_Tick;
 
             toolStripStatusLabelInterval.Text = "Interval: " + Properties.Settings.Default.interval;
+        }
+
+        private void optionsMenuItem_click(object sender, EventArgs e)
+        {
+            OptionsModal optionsModal = new OptionsModal();
+
+            optionsModal.timerInterval.Text = Properties.Settings.Default.interval.ToString();
+            optionsModal.universeWidth.Text = Properties.Settings.Default.universe_width.ToString();
+            optionsModal.universeHeight.Text = Properties.Settings.Default.universe_height.ToString();
+
+            if (DialogResult.OK == optionsModal.ShowDialog())
+            {
+                //if ok is clicked;
+            }
         }
 
         // Calculate the next generation of cells

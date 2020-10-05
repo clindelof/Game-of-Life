@@ -71,6 +71,34 @@ namespace Game_of_Life
             universe = new bool[Properties.Settings.Default.universe_height, Properties.Settings.Default.universe_width];
         }
 
+        private void updateSeed (object sender, EventArgs e)
+        {
+            Seed updateSeed = new Seed();
+            updateSeed.seedValue.Value = Properties.Settings.Default.seed;
+
+            if (DialogResult.OK == updateSeed.ShowDialog())
+            {
+                Properties.Settings.Default.seed = (int) updateSeed.seedValue.Value;
+                Properties.Settings.Default.Save();
+
+                toolStripStatusLabelSeed.Text = "Seed: " + Properties.Settings.Default.seed;
+            }
+        }
+
+        private void timeSeed (object sender, EventArgs e)
+        {
+            TimeSpan t = DateTime.UtcNow - new DateTime(1970, 1, 1);
+            int secondsSinceEpoch = (int)t.TotalSeconds;
+
+            Random rnd = new Random(secondsSinceEpoch);
+
+            Properties.Settings.Default.seed = rnd.Next(0, int.MaxValue);
+            Properties.Settings.Default.Save();
+
+            toolStripStatusLabelSeed.Text = "Seed: " + Properties.Settings.Default.seed;
+        }
+
+
         private void optionsMenuItem_click(object sender, EventArgs e)
         {
             OptionsModal optionsModal = new OptionsModal();
@@ -223,6 +251,14 @@ namespace Game_of_Life
 
         }
 
+        private void Form1_Load(object sender, EventArgs e)
+        {
 
+        }
+
+        private void fileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

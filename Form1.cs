@@ -33,6 +33,53 @@ namespace Game_of_Life
 
             toolStripStatusLabelInterval.Text = "Interval: " + Properties.Settings.Default.interval;
             toolStripStatusLabelSeed.Text = "Seed: " + Properties.Settings.Default.seed;
+
+            setMenuMode();
+        }
+
+        private void generateUniverse()
+        {
+            Random rnd = new Random(Properties.Settings.Default.seed);
+
+            for (int i = 0; i < universe.GetLength(1); i++)
+            {
+                for (int j = 0; j < universe.GetLength(0); j++)
+                {
+                    universe[i, j] = (rnd.Next(0, int.MaxValue) % 2) == 0;
+                }
+            }
+
+            graphicsPanel1.Invalidate();
+        }
+
+        private void setMenuMode()
+        {
+            if (Properties.Settings.Default.mode == "Toroidal")
+            {
+                toroidalToolStripMenuItem.Checked = true;
+                finiteToolStripMenuItem.Checked = false;
+            }
+            else if (Properties.Settings.Default.mode == "Finite")
+            {
+                finiteToolStripMenuItem.Checked = true;
+                toroidalToolStripMenuItem.Checked = false;
+            }
+        }
+
+        private void setMode (object sender, EventArgs e)
+        {
+            ToolStripMenuItem clicked = (ToolStripMenuItem)sender;
+
+            if (clicked.Equals(toroidalToolStripMenuItem))
+            {
+                Properties.Settings.Default.mode = "Toroidal";
+            } else if (clicked.Equals(finiteToolStripMenuItem))
+            {
+                Properties.Settings.Default.mode = "Finite";
+            }
+
+            Properties.Settings.Default.Save();
+            setMenuMode();
         }
 
         private void cellColorMenuItem(object sender, EventArgs e)
@@ -69,6 +116,10 @@ namespace Game_of_Life
         private void clearUniverse(object sender, EventArgs e) 
         {
             universe = new bool[Properties.Settings.Default.universe_height, Properties.Settings.Default.universe_width];
+
+            generations = 0;
+
+            toolStripStatusLabelGenerations.Text = "Generations = " + generations.ToString();
         }
 
         private void updateSeed (object sender, EventArgs e)
@@ -82,6 +133,8 @@ namespace Game_of_Life
                 Properties.Settings.Default.Save();
 
                 toolStripStatusLabelSeed.Text = "Seed: " + Properties.Settings.Default.seed;
+
+                generateUniverse();
             }
         }
 
@@ -96,8 +149,14 @@ namespace Game_of_Life
             Properties.Settings.Default.Save();
 
             toolStripStatusLabelSeed.Text = "Seed: " + Properties.Settings.Default.seed;
+
+            generateUniverse();
         }
 
+        private void currentSeed(object sender, EventArgs e)
+        {
+            generateUniverse();
+        }
 
         private void optionsMenuItem_click(object sender, EventArgs e)
         {

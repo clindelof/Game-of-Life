@@ -26,5 +26,8 @@
     <Setting Name="gridIntervalColor" Type="System.Drawing.Color" Scope="User">
       <Value Profile="(Default)">Black</Value>
     </Setting>
+    <Setting Name="mode" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Toroidal</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

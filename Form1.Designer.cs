@@ -81,6 +81,7 @@
             this.toolStripStatusLabelSeed = new System.Windows.Forms.ToolStripStatusLabel();
             this.graphicsPanel1 = new Game_of_Life.GraphicsPanel();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
+            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -155,6 +156,7 @@
             this.saveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
             this.saveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.saveToolStripMenuItem.Text = "&Save";
+            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveUniverse);
             // 
             // toolStripSeparator1
             // 
@@ -579,6 +581,7 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelAlive;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelSeed;
         private System.Windows.Forms.ColorDialog colorDialog1;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog1;
     }
 }
 

@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.SqlTypes;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -318,6 +319,33 @@ namespace Game_of_Life
         private void fileToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void saveUniverse(object sender, EventArgs e)
+        {
+
+            SaveFileDialog dlg = new SaveFileDialog();
+            dlg.Filter = "All Files|*.*|Cells|*.cells";
+            dlg.FilterIndex = 2; dlg.DefaultExt = "cells";
+
+            if (DialogResult.OK == dlg.ShowDialog())
+            {
+                StreamWriter writer = new StreamWriter(dlg.FileName);
+
+                for (int i = 0; i < universe.GetLength(1); i++)
+                {
+                    String buffer = String.Empty;
+
+                    for (int j = 0; j < universe.GetLength(0); j++)
+                    {
+                        buffer += (universe[j, i]) ? "O" : ".";
+                    }
+
+                    writer.WriteLine(buffer);
+                }
+
+                writer.Close();
+            }
         }
     }
 }

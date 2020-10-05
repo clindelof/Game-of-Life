@@ -402,5 +402,54 @@ namespace Game_of_Life
                 graphicsPanel1.Invalidate();
             }
         }
+
+        private void importUniverse(object sender, EventArgs e)
+        {
+            OpenFileDialog dlg = new OpenFileDialog();
+            dlg.Filter = "All Files|*.*|Cells|*.cells";
+            dlg.FilterIndex = 2; dlg.DefaultExt = "cells";
+
+            if (DialogResult.OK == dlg.ShowDialog())
+            {
+                StreamReader reader = new StreamReader(dlg.FileName);
+
+                int maxWidth = 0;
+                int maxHeight = 0;
+
+                while (!reader.EndOfStream)
+                {
+                    string line = reader.ReadLine();
+                    if (!line.StartsWith("!"))
+                    {
+                        maxHeight++;
+                        maxWidth = (line.Length > maxWidth) ? line.Length : maxWidth;
+                    }
+                }
+
+                clearUniverse(sender, e);
+
+                reader.BaseStream.Seek(0, SeekOrigin.Begin);
+
+                int row = ((universe.GetLength(1) - maxHeight) / 2 );
+                while (!reader.EndOfStream)
+                {
+                    string line = reader.ReadLine();
+
+                    if (!line.StartsWith("!"))
+                    {
+                        int i = ((universe.GetLength(0) - maxWidth) / 2);
+                        foreach (char chr in line)
+                        {
+                            universe[i, row] = (chr == 'O');
+                            i++;
+                        }
+                        row++;
+                    }
+                }
+
+                reader.Close();
+                graphicsPanel1.Invalidate();
+            }
+        }
     }
 }

@@ -17,10 +17,6 @@ namespace Game_of_Life
         // The universe array
         bool[,] universe = new bool[Properties.Settings.Default.universe_height, Properties.Settings.Default.universe_width ];
 
-        // Drawing colors
-        Color gridColor = Color.Black;
-        Color cellColor = Color.Gray;
-
         // The Timer class
         Timer timer = new Timer();
 
@@ -37,6 +33,37 @@ namespace Game_of_Life
 
             toolStripStatusLabelInterval.Text = "Interval: " + Properties.Settings.Default.interval;
             toolStripStatusLabelSeed.Text = "Seed: " + Properties.Settings.Default.seed;
+        }
+
+        private void cellColorMenuItem(object sender, EventArgs e)
+        {
+            ColorDialog cp = new ColorDialog();
+
+            ToolStripMenuItem clicked = (ToolStripMenuItem) sender;
+
+            if (DialogResult.OK == cp.ShowDialog())
+            {
+                if (clicked.Equals(backColorToolStripMenuItem))
+                {
+                    Properties.Settings.Default.backColor = cp.Color;
+                } else if (clicked.Equals(gridColorToolStripMenuItem))
+                {
+                    Properties.Settings.Default.gridColor = cp.Color;
+                } else if (clicked.Equals(cellColorToolStripMenuItem))
+                {
+                    Properties.Settings.Default.cellColor = cp.Color;
+                }
+                
+                Properties.Settings.Default.Save();
+
+                graphicsPanel1.Invalidate();
+            }
+        }
+
+        private void resetApplication(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.Reset();
+            graphicsPanel1.Invalidate();
         }
 
         private void clearUniverse(object sender, EventArgs e) 
@@ -100,11 +127,13 @@ namespace Game_of_Life
             // CELL HEIGHT = WINDOW HEIGHT / NUMBER OF CELLS IN Y
             int cellHeight = graphicsPanel1.ClientSize.Height / universe.GetLength(1);
 
+            graphicsPanel1.BackColor = Properties.Settings.Default.backColor;
+
             // A Pen for drawing the grid lines (color, width)
-            Pen gridPen = new Pen(gridColor, 1);
+            Pen gridPen = new Pen(Properties.Settings.Default.gridColor, 1);
 
             // A Brush for filling living cells interiors (color)
-            Brush cellBrush = new SolidBrush(cellColor);
+            Brush cellBrush = new SolidBrush(Properties.Settings.Default.cellColor);
 
             // Iterate through the universe in the y, top to bottom
             for (int y = 0; y < universe.GetLength(1); y++)

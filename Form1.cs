@@ -325,7 +325,9 @@ namespace Game_of_Life
             {
                 for (int j = 0; j < universe.GetLength(0); j++)
                 {
-                    universe[i, j] = (rnd.Next(0, int.MaxValue) % 2) == 0;
+                    int test = rnd.Next(0, 3);
+
+                    universe[j, i] = (test == 0);
                 }
             }
 

@@ -209,6 +209,9 @@ namespace Game_of_Life
 
         private void graphicsPanel1_Paint(object sender, PaintEventArgs e)
         {
+
+            int alive = 0;
+
             // Calculate the width and height of each cell in pixels
             // CELL WIDTH = WINDOW WIDTH / NUMBER OF CELLS IN X
             int cellWidth = graphicsPanel1.ClientSize.Width / universe.GetLength(0);
@@ -240,12 +243,15 @@ namespace Game_of_Life
                     if (universe[x, y] == true)
                     {
                         e.Graphics.FillRectangle(cellBrush, cellRect);
+                        alive++;
                     }
 
                     // Outline the cell with a pen
                     e.Graphics.DrawRectangle(gridPen, cellRect.X, cellRect.Y, cellRect.Width, cellRect.Height);
                 }
             }
+
+            toolStripStatusLabelAlive.Text = "Alive: " + alive;
 
             // Cleaning up pens and brushes
             gridPen.Dispose();
@@ -345,6 +351,55 @@ namespace Game_of_Life
                 }
 
                 writer.Close();
+            }
+        }
+
+        private void openSavedUniverse(object sender, EventArgs e)
+        {
+            OpenFileDialog dlg = new OpenFileDialog();
+            dlg.Filter = "All Files|*.*|Cells|*.cells";
+            dlg.FilterIndex = 2; dlg.DefaultExt = "cells";
+
+            if (DialogResult.OK == dlg.ShowDialog())
+            {
+                StreamReader reader = new StreamReader(dlg.FileName);
+
+                int maxWidth = 0;
+                int maxHeight = 0;
+
+                while(!reader.EndOfStream)
+                {
+                    string line = reader.ReadLine();
+                    if (!line.StartsWith("!"))
+                    {
+                        maxHeight++;
+                        maxWidth = (line.Length > maxWidth) ? line.Length : maxWidth;
+                    }
+                }
+
+                universe = new bool[maxHeight, maxWidth];
+
+                reader.BaseStream.Seek(0, SeekOrigin.Begin);
+
+                int row = 0;
+                while(!reader.EndOfStream)
+                {
+                    string line = reader.ReadLine();
+
+                    if (!line.StartsWith("!"))
+                    {
+                        int i = 0;
+                        foreach(char chr in line)
+                        {
+                            universe[i, row] = (chr == 'O');
+                            i++;
+                        }
+                        row++;
+                    }
+                }
+
+                reader.Close();
+                graphicsPanel1.Invalidate();
             }
         }
     }

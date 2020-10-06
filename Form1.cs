@@ -37,7 +37,20 @@ namespace Game_of_Life
 
             gridToolStripMenuItem.Checked = Properties.Settings.Default.gridLines;
 
+            neighborCountToolStripMenuItem.Checked = Properties.Settings.Default.count;
+
             setMenuMode();
+        }
+
+        private void toggleNeighborCount(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.count = !Properties.Settings.Default.count;
+
+            Properties.Settings.Default.Save();
+
+            neighborCountToolStripMenuItem.Checked = Properties.Settings.Default.count;
+
+            graphicsPanel1.Invalidate();
         }
 
         private void toggleGridLines(object sender, EventArgs e)
@@ -46,7 +59,7 @@ namespace Game_of_Life
 
             Properties.Settings.Default.Save();
 
-            gridToolStripMenuItem.Checked = !Properties.Settings.Default.gridLines;
+            gridToolStripMenuItem.Checked = Properties.Settings.Default.gridLines;
 
             graphicsPanel1.Invalidate();
         }

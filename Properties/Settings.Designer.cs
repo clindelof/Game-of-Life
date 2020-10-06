@@ -130,5 +130,29 @@ namespace Game_of_Life.Properties {
                 this["mode"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool count {
+            get {
+                return ((bool)(this["count"]));
+            }
+            set {
+                this["count"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool gridLines {
+            get {
+                return ((bool)(this["gridLines"]));
+            }
+            set {
+                this["gridLines"] = value;
+            }
+        }
     }
 }

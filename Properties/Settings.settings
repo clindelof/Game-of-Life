@@ -29,5 +29,11 @@
     <Setting Name="mode" Type="System.String" Scope="User">
       <Value Profile="(Default)">Toroidal</Value>
     </Setting>
+    <Setting Name="count" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="gridLines" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

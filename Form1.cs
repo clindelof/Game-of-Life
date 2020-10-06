@@ -35,38 +35,51 @@ namespace Game_of_Life
             toolStripStatusLabelInterval.Text = "Interval: " + Properties.Settings.Default.interval;
             toolStripStatusLabelSeed.Text = "Seed: " + Properties.Settings.Default.seed;
 
+            gridToolStripMenuItem.Checked = Properties.Settings.Default.gridLines;
+
             setMenuMode();
+        }
+
+        private void toggleGridLines(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.gridLines = !Properties.Settings.Default.gridLines;
+
+            Properties.Settings.Default.Save();
+
+            gridToolStripMenuItem.Checked = !Properties.Settings.Default.gridLines;
+
+            graphicsPanel1.Invalidate();
         }
 
         private void generateNextGeneration()
         {
             bool[,] scratchPad = new bool[Properties.Settings.Default.universe_height, Properties.Settings.Default.universe_width];
 
-            for (int i = 0; i < universe.GetLength(1); i++)
+            for (int y = 0; y < universe.GetLength(1); y++)
             {
-                for (int j = 0; j < universe.GetLength(0); j++)
+                for (int x = 0; x < universe.GetLength(0); x++)
                 {
                     int neighbors = 0;
 
                     if (Properties.Settings.Default.mode == "Finite")
                     {
-                        neighbors = finiteNeighbors(j, i);
+                        neighbors = finiteNeighbors(x, y);
                     } else if (Properties.Settings.Default.mode == "Toroidal")
                     {
-                        neighbors = toroidalNeightbors(j, i);
+                        neighbors = toroidalNeightbors(x, y);
                     }
 
-                    if (neighbors < 2 && universe[i,j])
+                    if (neighbors < 2 && universe[y,x])
                     {
-                        scratchPad[i, j] = false;
-                    } else if (neighbors > 3 && universe[i,j])
+                        scratchPad[y, x] = false;
+                    } else if (neighbors > 3 && universe[y,x])
                     {
-                        scratchPad[i, j] = false;
-                    } else if ((neighbors == 2 || neighbors == 3) && universe[i,j]) {
-                        scratchPad[i, j] = true;
-                    } else if (neighbors == 3 && !universe[i,j])
+                        scratchPad[y, x] = false;
+                    } else if ((neighbors == 2 || neighbors == 3) && universe[y,x]) {
+                        scratchPad[y, x] = true;
+                    } else if (neighbors == 3 && !universe[y,x])
                     {
-                        scratchPad[i, j] = true;
+                        scratchPad[y, x] = true;
                     }
                 }
             }
@@ -81,13 +94,8 @@ namespace Game_of_Life
 
             if (y == 0)
             {
-                //dead cells at the upper edge
-                count += 3;
-
                 if (x == 0)
                 {
-                    //dead cells at the upper left corner
-                    count += 2;
 
                     if (universe[y, x + 1]) count++; //right
                     if (universe[y + 1, x + 1]) count++; //bottom right
@@ -95,8 +103,6 @@ namespace Game_of_Life
                 }
                 else if (x == universe.GetLength(0) - 1)
                 {
-                    //dead cells at the upper right corner
-                    count += 2;
 
                     if (universe[y, x - 1]) count++; //left
                     if (universe[y + 1, x - 1]) count++; //bottom right
@@ -113,19 +119,15 @@ namespace Game_of_Life
             } 
             else if (y == universe.GetLength(1) - 1)
             {
-                //dead cells at the bottom edge
-                count += 3;
 
                 if (x == 0)
                 {
-                    count += 2;
 
                     if (universe[y, x + 1]) count++; //right
                     if (universe[y - 1, x + 1]) count++; //upper right
                     if (universe[y - 1, x]) count++; //top
                 } else if (x == universe.GetLength(0) - 1)
                 {
-                    count += 2;
 
                     if (universe[y, x - 1]) count++; //left
                     if (universe[y - 1, x - 1]) count++; //upper left
@@ -144,9 +146,6 @@ namespace Game_of_Life
             {
                 if (x == 0)
                 {
-                    //dead cells at left edge
-                    count += 3;
-
                     if (universe[y -1, x]) count++; //upper
                     if (universe[y - 1, x + 1]) count++; //upper right
                     if (universe[y, x + 1]) count++; //right
@@ -155,8 +154,6 @@ namespace Game_of_Life
                 }
                 else if (x == universe.GetLength(0) - 1)
                 {
-                    //dead cells at right edge
-                    count += 3;
 
                     if (universe[y - 1, x]) count++; //upper
                     if (universe[y - 1, x - 1]) count++; //upper left
@@ -188,128 +185,127 @@ namespace Game_of_Life
 
             if (y == 0)
             {
-                if (universe[universe.GetLength(1) - 1, x]) count++; //opposite end of column
+                if (universe[x, universe.GetLength(1) - 1]) count++; //opposite end of column
 
                 if (x == 0)
                 {
-                    if (universe[y, universe.GetLength(0) - 1]) count++; //opposite end of row
-                    if (universe[y + 1, universe.GetLength(0) - 1]) count++; //opposite end of next row down
+                    if (universe[universe.GetLength(0) - 1, y]) count++; //opposite end of row
+                    if (universe[universe.GetLength(0) - 1, y + 1]) count++; //opposite end of next row down
 
-                    if (universe[universe.GetLength(1) - 1, x +1]) count++; //opposite end of column to the right
+                    if (universe[x +1, universe.GetLength(1) - 1]) count++; //opposite end of column to the right
 
-                    if (universe[universe.GetLength(1) - 1, universe.GetLength(0) - 1]) count++; //opposite corner of universe
+                    if (universe[universe.GetLength(0) - 1, universe.GetLength(1) - 1]) count++; //opposite corner of universe
 
-                    if (universe[y, x + 1]) count++; //right
-                    if (universe[y + 1, x + 1]) count++; //bottom right
-                    if (universe[y + 1, x]) count++; //bottom
+                    if (universe[x + 1, y]) count++; //right
+                    if (universe[x + 1, y + 1]) count++; //bottom right
+                    if (universe[x, y + 1]) count++; //bottom
                 }
                 else if (x == universe.GetLength(0) - 1)
                 {
-                    if (universe[y, 0]) count++; //opposite end of row
-                    if (universe[y + 1, 0]) count++; //opposite end of next row down
+                    if (universe[0, y]) count++; //opposite end of row
+                    if (universe[ 0, y + 1]) count++; //opposite end of next row down
 
-                    if (universe[universe.GetLength(1) - 1, x - 1]) count++; //opposite end of column to the left
+                    if (universe[x - 1, universe.GetLength(1) - 1]) count++; //opposite end of column to the left
 
-                    if (universe[universe.GetLength(1) - 1, 0]) count++; //opposite corner of universe
+                    if (universe[0, universe.GetLength(1) - 1]) count++; //opposite corner of universe
 
-                    if (universe[y, x - 1]) count++; //left
-                    if (universe[y + 1, x - 1]) count++; //bottom left
-                    if (universe[y + 1, x]) count++; //bottom
+                    if (universe[x - 1, y]) count++; //left
+                    if (universe[x - 1, y + 1]) count++; //bottom left
+                    if (universe[x, y + 1]) count++; //bottom
                 }
                 else
                 {
-                    if (universe[universe.GetLength(1) - 1, x - 1]) count++; //opposite end of column to the left
-                    if (universe[universe.GetLength(1) - 1, x + 1]) count++; //opposite end of column to the right
+                    if (universe[x - 1, universe.GetLength(1) - 1]) count++; //opposite end of column to the left
+                    if (universe[x + 1, universe.GetLength(1) - 1]) count++; //opposite end of column to the right
 
-                    if (universe[y, x - 1]) count++; //left
-                    if (universe[y, x + 1]) count++; //right
-                    if (universe[y + 1, x - 1]) count++; //bottom left
-                    if (universe[y + 1, x]) count++; //bottom
-                    if (universe[y + 1, x + 1]) count++; //bottom right;
+                    if (universe[x - 1,y]) count++; //left
+                    if (universe[x + 1,y]) count++; //right
+                    if (universe[x - 1, y + 1]) count++; //bottom left
+                    if (universe[ x, y + 1]) count++; //bottom
+                    if (universe[x + 1, y + 1]) count++; //bottom right;
                 }
             }
             else if (y == universe.GetLength(1) - 1)
             {
 
-                if (universe[0, x]) count++; //opposite end of column
+                if (universe[x, 0]) count++; //opposite end of column
 
                 if (x == 0)
                 {
-                    if (universe[y, universe.GetLength(0) - 1]) count++; //opposite end of row
-                    if (universe[y - 1, universe.GetLength(0) - 1]) count++; //opposite end of next row up
+                    if (universe[universe.GetLength(0) - 1, y]) count++; //opposite end of row
+                    if (universe[universe.GetLength(0) - 1, y - 1]) count++; //opposite end of next row up
 
                     if (universe[0, universe.GetLength(0) - 1]) count++; //opposite corner of universe
                     if (universe[0, x + 1]) count++; //opposite end of column to the right
 
-                    if (universe[y, x + 1]) count++; //right
-                    if (universe[y - 1, x + 1]) count++; //upper right
-                    if (universe[y - 1, x]) count++; //top
+                    if (universe[x + 1, y]) count++; //right
+                    if (universe[x + 1, y - 1]) count++; //upper right
+                    if (universe[ x, y - 1]) count++; //top
                 }
                 else if (x == universe.GetLength(0) - 1)
                 {
-                    if (universe[y, 0]) count++; //opposite end of row
-                    if (universe[y - 1, 0]) count++; //opposite end of next row up
+                    if (universe[0, y]) count++; //opposite end of row
+                    if (universe[0, y - 1]) count++; //opposite end of next row up
 
-                    if (universe[0, x -1]) count++; //opposite end of column to the left
+                    if (universe[x -1, 0]) count++; //opposite end of column to the left
 
                     if (universe[0, 0]) count++; //opposite corner of universe
 
-                    if (universe[y, x - 1]) count++; //left
-                    if (universe[y - 1, x - 1]) count++; //upper left
-                    if (universe[y - 1, x]) count++; //top
+                    if (universe[x - 1 , y ]) count++; //left
+                    if (universe[ x - 1, y - 1]) count++; //upper left
+                    if (universe[x, y - 1]) count++; //top
 
                 }
                 else
                 {
-                    if (universe[0, x - 1]) count++; //opposite end of column to the left
-                    if (universe[0, x + 1]) count++; //opposite end of column to the right
+                    if (universe[x - 1, 0]) count++; //opposite end of column to the left
+                    if (universe[ x + 1, 0]) count++; //opposite end of column to the right
 
-                    if (universe[y, x - 1]) count++; //left
-                    if (universe[y, x + 1]) count++; //right
-                    if (universe[y - 1, x - 1]) count++; //top left
-                    if (universe[y - 1, x]) count++; //top
-                    if (universe[y - 1, x + 1]) count++; //top right;
+                    if (universe[x - 1, y]) count++; //left
+                    if (universe[ x + 1, y]) count++; //right
+                    if (universe[x - 1, y - 1]) count++; //top left
+                    if (universe[x, y - 1]) count++; //top
+                    if (universe[x + 1, y - 1]) count++; //top right;
                 }
             }
             else
             {
                 if (x == 0)
                 {
-                    //dead cells at left edge
-                    count += 3;
-                    if (universe[y, universe.GetLength(0) - 1]) count++; //opposite end of row
-                    if (universe[y + 1, universe.GetLength(0) - 1]) count++; //opposite end of row down
-                    if (universe[y - 1, universe.GetLength(0) - 1]) count++; //opposite end of row up
 
-                    if (universe[y - 1, x]) count++; //upper
-                    if (universe[y - 1, x + 1]) count++; //upper right
-                    if (universe[y, x + 1]) count++; //right
-                    if (universe[y + 1, x + 1]) count++; //bottom right
-                    if (universe[y + 1, x]) count++; //bottom
+                    if (universe[universe.GetLength(0) - 1, y]) count++; //opposite end of row
+                    if (universe[universe.GetLength(0) - 1, y + 1 ]) count++; //opposite end of row down
+                    if (universe[universe.GetLength(0) - 1, y - 1 ]) count++; //opposite end of row up
+
+                    if (universe[x, y - 1]) count++; //upper
+                    if (universe[x + 1, y - 1]) count++; //upper right
+                    if (universe[x + 1, y]) count++; //right
+                    if (universe[x + 1, y + 1]) count++; //bottom right
+                    if (universe[x, y + 1]) count++; //bottom
                 }
                 else if (x == universe.GetLength(0) - 1)
                 {
-                    if (universe[y, 0]) count++; //opposite end of row
-                    if (universe[y + 1, 0]) count++; //opposite end of row down
-                    if (universe[y - 1, 0]) count++; //opposite end of row up
+                    if (universe[0, y]) count++; //opposite end of row
+                    if (universe[0, y + 1]) count++; //opposite end of row down
+                    if (universe[0, y - 1]) count++; //opposite end of row up
 
-                    if (universe[y - 1, x]) count++; //upper
-                    if (universe[y - 1, x - 1]) count++; //upper left
-                    if (universe[y, x - 1]) count++; //left
-                    if (universe[y + 1, x - 1]) count++; //bottom left
-                    if (universe[y + 1, x]) count++; //bottom
+                    if (universe[x, y - 1]) count++; //upper
+                    if (universe[x - 1, y - 1]) count++; //upper left
+                    if (universe[x - 1, y]) count++; //left
+                    if (universe[x - 1, y + 1]) count++; //bottom left
+                    if (universe[x, y + 1]) count++; //bottom
 
                 }
                 else
                 {
-                    if (universe[y - 1, x]) count++; //upper
-                    if (universe[y - 1, x + 1]) count++; //upper right
-                    if (universe[y, x + 1]) count++; //right
-                    if (universe[y + 1, x + 1]) count++; //bottom right
-                    if (universe[y + 1, x]) count++; //bottom
-                    if (universe[y + 1, x - 1]) count++; //bottom left
-                    if (universe[y, x - 1]) count++; //left
-                    if (universe[y - 1, x - 1]) count++; //upper left
+                    if (universe[x, y - 1]) count++; //upper
+                    if (universe[x + 1, y - 1]) count++; //upper right
+                    if (universe[x + 1, y]) count++; //right
+                    if (universe[x + 1, y + 1]) count++; //bottom right
+                    if (universe[x, y + 1]) count++; //bottom
+                    if (universe[x - 1, y + 1]) count++; //bottom left
+                    if (universe[x - 1, y]) count++; //left
+                    if (universe[x - 1, y - 1]) count++; //upper left
                 }
             }
 
@@ -321,13 +317,13 @@ namespace Game_of_Life
         {
             Random rnd = new Random(Properties.Settings.Default.seed);
 
-            for (int i = 0; i < universe.GetLength(1); i++)
+            for (int y = 0; y < universe.GetLength(1); y++)
             {
-                for (int j = 0; j < universe.GetLength(0); j++)
+                for (int x = 0; x < universe.GetLength(0); x++)
                 {
                     int test = rnd.Next(0, 3);
 
-                    universe[j, i] = (test == 0);
+                    universe[x, y] = (test == 0);
                 }
             }
 
@@ -346,6 +342,8 @@ namespace Game_of_Life
                 finiteToolStripMenuItem.Checked = true;
                 toroidalToolStripMenuItem.Checked = false;
             }
+
+            graphicsPanel1.Invalidate();
         }
 
         private void setMode(object sender, EventArgs e)
@@ -525,6 +523,7 @@ namespace Game_of_Life
                     cellRect.Width = cellWidth;
                     cellRect.Height = cellHeight;
 
+
                     // Fill the cell with a brush if alive
                     if (universe[x, y] == true)
                     {
@@ -532,8 +531,21 @@ namespace Game_of_Life
                         alive++;
                     }
 
-                    // Outline the cell with a pen
-                    e.Graphics.DrawRectangle(gridPen, cellRect.X, cellRect.Y, cellRect.Width, cellRect.Height);
+                    
+                    if (Properties.Settings.Default.gridLines)
+                    {
+                        // Outline the cell with a pen
+                        e.Graphics.DrawRectangle(gridPen, cellRect.X, cellRect.Y, cellRect.Width, cellRect.Height);
+                    }
+                    
+                    
+                    if (Properties.Settings.Default.mode == "Finite" && Properties.Settings.Default.count)
+                    {
+                        e.Graphics.DrawString(finiteNeighbors(x, y).ToString(), graphicsPanel1.Font, Brushes.Black, cellRect.Location);
+                    } else if (Properties.Settings.Default.mode == "Toroidal" && Properties.Settings.Default.count)
+                    {
+                        e.Graphics.DrawString(toroidalNeightbors(x, y).ToString(), graphicsPanel1.Font, Brushes.Black, cellRect.Location);
+                    }
                 }
             }
 
@@ -620,13 +632,13 @@ namespace Game_of_Life
             {
                 StreamWriter writer = new StreamWriter(dlg.FileName);
 
-                for (int i = 0; i < universe.GetLength(1); i++)
+                for (int y = 0; y < universe.GetLength(1); y++)
                 {
                     String buffer = String.Empty;
 
-                    for (int j = 0; j < universe.GetLength(0); j++)
+                    for (int x = 0;  x <universe.GetLength(0); x++)
                     {
-                        buffer += (universe[j, i]) ? "O" : ".";
+                        buffer += (universe[x, y]) ? "O" : ".";
                     }
 
                     writer.WriteLine(buffer);
@@ -659,24 +671,24 @@ namespace Game_of_Life
                     }
                 }
 
-                universe = new bool[maxHeight, maxWidth];
+                universe = new bool[maxWidth, maxHeight];
 
                 reader.BaseStream.Seek(0, SeekOrigin.Begin);
 
-                int row = 0;
+                int y = 0;
                 while (!reader.EndOfStream)
                 {
                     string line = reader.ReadLine();
 
                     if (!line.StartsWith("!"))
                     {
-                        int i = 0;
+                        int x = 0;
                         foreach (char chr in line)
                         {
-                            universe[i, row] = (chr == 'O');
-                            i++;
+                            universe[x, y] = (chr == 'O');
+                            x++;
                         }
-                        row++;
+                        y++;
                     }
                 }
 
@@ -712,20 +724,20 @@ namespace Game_of_Life
 
                 reader.BaseStream.Seek(0, SeekOrigin.Begin);
 
-                int row = ((universe.GetLength(1) - maxHeight) / 2);
+                int y = ((universe.GetLength(1) - maxHeight) / 2);
                 while (!reader.EndOfStream)
                 {
                     string line = reader.ReadLine();
 
                     if (!line.StartsWith("!"))
                     {
-                        int i = ((universe.GetLength(0) - maxWidth) / 2);
+                        int x = ((universe.GetLength(0) - maxWidth) / 2);
                         foreach (char chr in line)
                         {
-                            universe[i, row] = (chr == 'O');
-                            i++;
+                            universe[x,y ] = (chr == 'O');
+                            x++;
                         }
-                        row++;
+                        y++;
                     }
                 }
 

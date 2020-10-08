@@ -16,7 +16,7 @@ namespace Game_of_Life
     public partial class Form1 : Form
     {
         // The universe array
-        bool[,] universe = new bool[Properties.Settings.Default.universe_height, Properties.Settings.Default.universe_width];
+        bool[,] universe = new bool[Properties.Settings.Default.universe_width, Properties.Settings.Default.universe_height];
 
         // The Timer class
         Timer timer = new Timer();
@@ -27,6 +27,7 @@ namespace Game_of_Life
         public Form1()
         {
             InitializeComponent();
+            Properties.Settings.Default.Reload();
 
             // Setup the timer
             timer.Interval = Properties.Settings.Default.interval; // milliseconds
@@ -38,6 +39,8 @@ namespace Game_of_Life
             gridToolStripMenuItem.Checked = Properties.Settings.Default.gridLines;
 
             neighborCountToolStripMenuItem.Checked = Properties.Settings.Default.count;
+
+            hudToolStripMenuItem.Checked = Properties.Settings.Default.hud;
 
             setMenuMode();
         }
@@ -64,9 +67,20 @@ namespace Game_of_Life
             graphicsPanel1.Invalidate();
         }
 
+        private void toggleHUD(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.hud = !Properties.Settings.Default.hud;
+
+            Properties.Settings.Default.Save();
+
+            hudToolStripMenuItem.Checked = Properties.Settings.Default.hud;
+
+            graphicsPanel1.Invalidate();
+        }
+
         private void generateNextGeneration()
         {
-            bool[,] scratchPad = new bool[Properties.Settings.Default.universe_height, Properties.Settings.Default.universe_width];
+            bool[,] scratchPad = new bool[Properties.Settings.Default.universe_width, Properties.Settings.Default.universe_height];
 
             for (int y = 0; y < universe.GetLength(1); y++)
             {
@@ -79,20 +93,20 @@ namespace Game_of_Life
                         neighbors = finiteNeighbors(x, y);
                     } else if (Properties.Settings.Default.mode == "Toroidal")
                     {
-                        neighbors = toroidalNeightbors(x, y);
+                        neighbors = toroidalNeighbors(x, y);
                     }
 
-                    if (neighbors < 2 && universe[y,x])
+                    if (neighbors < 2 && universe[x,y])
                     {
-                        scratchPad[y, x] = false;
-                    } else if (neighbors > 3 && universe[y,x])
+                        scratchPad[x, y] = false;
+                    } else if (neighbors > 3 && universe[x,y])
                     {
-                        scratchPad[y, x] = false;
-                    } else if ((neighbors == 2 || neighbors == 3) && universe[y,x]) {
-                        scratchPad[y, x] = true;
-                    } else if (neighbors == 3 && !universe[y,x])
+                        scratchPad[x, y] = false;
+                    } else if ((neighbors == 2 || neighbors == 3) && universe[x,y]) {
+                        scratchPad[x, y] = true;
+                    } else if (neighbors == 3 && !universe[x,y])
                     {
-                        scratchPad[y, x] = true;
+                        scratchPad[x, y] = true;
                     }
                 }
             }
@@ -192,7 +206,7 @@ namespace Game_of_Life
             return count;
         }
 
-        private int toroidalNeightbors(int x, int y)
+        private int toroidalNeighbors(int x, int y)
         {
             int count = 0;
 
@@ -248,7 +262,7 @@ namespace Game_of_Life
                     if (universe[universe.GetLength(0) - 1, y]) count++; //opposite end of row
                     if (universe[universe.GetLength(0) - 1, y - 1]) count++; //opposite end of next row up
 
-                    if (universe[0, universe.GetLength(0) - 1]) count++; //opposite corner of universe
+                    if (universe[universe.GetLength(0) - 1, 0]) count++; //opposite corner of universe
                     if (universe[0, x + 1]) count++; //opposite end of column to the right
 
                     if (universe[x + 1, y]) count++; //right
@@ -328,6 +342,8 @@ namespace Game_of_Life
 
         private void generateUniverse()
         {
+            universe = new bool[Properties.Settings.Default.universe_width, Properties.Settings.Default.universe_height];
+            
             Random rnd = new Random(Properties.Settings.Default.seed);
 
             for (int y = 0; y < universe.GetLength(1); y++)
@@ -411,7 +427,7 @@ namespace Game_of_Life
 
         private void clearUniverse(object sender, EventArgs e)
         {
-            universe = new bool[Properties.Settings.Default.universe_height, Properties.Settings.Default.universe_width];
+            universe = new bool[Properties.Settings.Default.universe_width, Properties.Settings.Default.universe_height];
             
             graphicsPanel1.Invalidate();
 
@@ -471,14 +487,14 @@ namespace Game_of_Life
                 Properties.Settings.Default.universe_height = (int)optionsModal.universeHeight.Value;
 
                 Properties.Settings.Default.Save();
-
-                updateOptionValues();
             }
+
+            updateOptionValues();
         }
 
         private void updateOptionValues()
         {
-            universe = new bool[Properties.Settings.Default.universe_height, Properties.Settings.Default.universe_width];
+            universe = new bool[Properties.Settings.Default.universe_width, Properties.Settings.Default.universe_height];
 
             timer.Interval = Properties.Settings.Default.interval;
             toolStripStatusLabelInterval.Text = "Interval: " + Properties.Settings.Default.interval;
@@ -508,6 +524,7 @@ namespace Game_of_Life
         {
 
             int alive = 0;
+            HUD.Visible = Properties.Settings.Default.hud;
 
             // Calculate the width and height of each cell in pixels
             // CELL WIDTH = WINDOW WIDTH / NUMBER OF CELLS IN X
@@ -516,12 +533,16 @@ namespace Game_of_Life
             int cellHeight = graphicsPanel1.ClientSize.Height / universe.GetLength(1);
 
             graphicsPanel1.BackColor = Properties.Settings.Default.backColor;
+            graphicsPanel1.AutoSize = true;
 
             // A Pen for drawing the grid lines (color, width)
             Pen gridPen = new Pen(Properties.Settings.Default.gridColor, 1);
 
             // A Brush for filling living cells interiors (color)
             Brush cellBrush = new SolidBrush(Properties.Settings.Default.cellColor);
+
+            SolidBrush aliveCell = new SolidBrush(Color.FromArgb(255 - Properties.Settings.Default.cellColor.R, 255 - Properties.Settings.Default.cellColor.G, 255 - Properties.Settings.Default.cellColor.B));
+            SolidBrush deadCell = new SolidBrush(Color.FromArgb(255 - Properties.Settings.Default.backColor.R, 255 - Properties.Settings.Default.backColor.G, 255 - Properties.Settings.Default.backColor.B));
 
             // Iterate through the universe in the y, top to bottom
             for (int y = 0; y < universe.GetLength(1); y++)
@@ -536,6 +557,7 @@ namespace Game_of_Life
                     cellRect.Width = cellWidth;
                     cellRect.Height = cellHeight;
 
+                    
 
                     // Fill the cell with a brush if alive
                     if (universe[x, y] == true)
@@ -554,10 +576,24 @@ namespace Game_of_Life
                     
                     if (Properties.Settings.Default.mode == "Finite" && Properties.Settings.Default.count)
                     {
-                        e.Graphics.DrawString(finiteNeighbors(x, y).ToString(), graphicsPanel1.Font, Brushes.Black, cellRect.Location);
+                        if (universe[x,y] == true)
+                        {
+                            e.Graphics.DrawString(finiteNeighbors(x, y).ToString(), graphicsPanel1.Font, aliveCell, cellRect.Location);
+                        } else
+                        {
+                            e.Graphics.DrawString(finiteNeighbors(x, y).ToString(), graphicsPanel1.Font, deadCell, cellRect.Location);
+                        }
+                        
                     } else if (Properties.Settings.Default.mode == "Toroidal" && Properties.Settings.Default.count)
                     {
-                        e.Graphics.DrawString(toroidalNeightbors(x, y).ToString(), graphicsPanel1.Font, Brushes.Black, cellRect.Location);
+                        if (universe[x, y] == true)
+                        {
+                            e.Graphics.DrawString(toroidalNeighbors(x, y).ToString(), graphicsPanel1.Font, aliveCell, cellRect.Location);
+                        }
+                        else
+                        {
+                            e.Graphics.DrawString(toroidalNeighbors(x, y).ToString(), graphicsPanel1.Font, deadCell, cellRect.Location);
+                        }
                     }
                 }
             }
@@ -567,6 +603,17 @@ namespace Game_of_Life
             // Cleaning up pens and brushes
             gridPen.Dispose();
             cellBrush.Dispose();
+
+            HUD.ForeColor = Color.FromArgb(255 - Properties.Settings.Default.backColor.R, 255 - Properties.Settings.Default.backColor.G, 255 - Properties.Settings.Default.backColor.B);
+
+            HUDgeneration.Text = "Generation: " + generations;
+            HUDalive.Text = "Alive: " + alive;
+            HUDboundary.Text = "Boundary Mode: " + Properties.Settings.Default.mode;
+            HUDuniverseWidth.Text = "Width: " + Properties.Settings.Default.universe_width.ToString();
+            HUDuniverseHeight.Text = "Height: " + Properties.Settings.Default.universe_height.ToString();
+
+
+            
         }
 
         private void graphicsPanel1_MouseClick(object sender, MouseEventArgs e)
@@ -612,26 +659,6 @@ namespace Game_of_Life
         private void nextButtonClick(object sender, EventArgs e)
         {
             NextGeneration();
-        }
-
-        private void viewToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void toolStripStatusLabel1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void fileToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void saveUniverse(object sender, EventArgs e)
@@ -757,6 +784,11 @@ namespace Game_of_Life
                 reader.Close();
                 graphicsPanel1.Invalidate();
             }
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Properties.Settings.Default.Save();
         }
     }
 }

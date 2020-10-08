@@ -24,3 +24,7 @@ D:\Project and Portolio 1\Game of Life\obj\Debug\Game of Life.csproj.GenerateRes
 D:\Project and Portolio 1\Game of Life\obj\Debug\Game of Life.csproj.CoreCompileInputs.cache
 D:\Project and Portolio 1\Game of Life\obj\Debug\Game of Life.exe
 D:\Project and Portolio 1\Game of Life\obj\Debug\Game of Life.pdb
+D:\Project and Portolio 1\Game of Life\bin\Debug\Game of Life.exe.manifest
+D:\Project and Portolio 1\Game of Life\bin\Debug\Game of Life.application
+D:\Project and Portolio 1\Game of Life\obj\Debug\Game of Life.exe.manifest
+D:\Project and Portolio 1\Game of Life\obj\Debug\Game of Life.application

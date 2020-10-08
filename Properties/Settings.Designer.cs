@@ -25,7 +25,7 @@ namespace Game_of_Life.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        [global::System.Configuration.DefaultSettingValueAttribute("20")]
         public int interval {
             get {
                 return ((int)(this["interval"]));
@@ -37,7 +37,7 @@ namespace Game_of_Life.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("15")]
+        [global::System.Configuration.DefaultSettingValueAttribute("30")]
         public int universe_width {
             get {
                 return ((int)(this["universe_width"]));
@@ -109,18 +109,6 @@ namespace Game_of_Life.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Black")]
-        public global::System.Drawing.Color gridIntervalColor {
-            get {
-                return ((global::System.Drawing.Color)(this["gridIntervalColor"]));
-            }
-            set {
-                this["gridIntervalColor"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Toroidal")]
         public string mode {
             get {
@@ -152,6 +140,18 @@ namespace Game_of_Life.Properties {
             }
             set {
                 this["gridLines"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool hud {
+            get {
+                return ((bool)(this["hud"]));
+            }
+            set {
+                this["hud"] = value;
             }
         }
     }

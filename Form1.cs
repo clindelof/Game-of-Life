@@ -621,28 +621,37 @@ namespace Game_of_Life
                         e.Graphics.DrawRectangle(gridPen, cellRect.X, cellRect.Y, cellRect.Width, cellRect.Height);
                     }
                     
-                    
-                    if (this.boundaryMode == "Finite" && this.neighborCount)
+                    if (this.neighborCount)
                     {
-                        if (universe[x,y] == true)
+                        StringFormat stringFormat = new StringFormat();
+                        stringFormat.Alignment = StringAlignment.Center;
+                        stringFormat.LineAlignment = StringAlignment.Center;
+
+                        if (this.boundaryMode == "Finite")
                         {
-                            e.Graphics.DrawString(finiteNeighbors(x, y).ToString(), graphicsPanel1.Font, aliveCell, cellRect.Location);
-                        } else
-                        {
-                            e.Graphics.DrawString(finiteNeighbors(x, y).ToString(), graphicsPanel1.Font, deadCell, cellRect.Location);
+                            if (universe[x, y] == true)
+                            {
+                                e.Graphics.DrawString(finiteNeighbors(x, y).ToString(), graphicsPanel1.Font, aliveCell, cellRect, stringFormat);
+                            }
+                            else
+                            {
+                                e.Graphics.DrawString(finiteNeighbors(x, y).ToString(), graphicsPanel1.Font, deadCell, cellRect, stringFormat);
+                            }
+
                         }
-                        
-                    } else if (this.boundaryMode == "Toroidal" && this.neighborCount)
-                    {
-                        if (universe[x, y] == true)
+                        else if (this.boundaryMode == "Toroidal")
                         {
-                            e.Graphics.DrawString(toroidalNeighbors(x, y).ToString(), graphicsPanel1.Font, aliveCell, cellRect.Location);
-                        }
-                        else
-                        {
-                            e.Graphics.DrawString(toroidalNeighbors(x, y).ToString(), graphicsPanel1.Font, deadCell, cellRect.Location);
+                            if (universe[x, y] == true)
+                            {
+                                e.Graphics.DrawString(toroidalNeighbors(x, y).ToString(), graphicsPanel1.Font, aliveCell, cellRect, stringFormat);
+                            }
+                            else
+                            {
+                                e.Graphics.DrawString(toroidalNeighbors(x, y).ToString(), graphicsPanel1.Font, deadCell, cellRect, stringFormat);
+                            }
                         }
                     }
+                    
                 }
             }
 

@@ -29,6 +29,8 @@ namespace Game_of_Life
 
         int seed;
 
+        int aliveCellCount = 0;
+
         Color aliveCellColor;
         Color backgroundColor;
         Color gridColor;
@@ -116,6 +118,7 @@ namespace Game_of_Life
         private void generateNextGeneration()
         {
             bool[,] scratchPad = new bool[this.universe_width, this.universe_height];
+            int tempAlive = 0;
 
             for (int y = 0; y < universe.GetLength(1); y++)
             {
@@ -143,10 +146,15 @@ namespace Game_of_Life
                     {
                         scratchPad[x, y] = true;
                     }
+
+                    if (scratchPad[x, y]) tempAlive++;
+
                 }
             }
 
             universe = scratchPad;
+            aliveCellCount = tempAlive;
+
             graphicsPanel1.Invalidate();
         }
 
@@ -159,24 +167,24 @@ namespace Game_of_Life
                 if (x == 0)
                 {
 
-                    if (universe[y, x + 1]) count++; //right
-                    if (universe[y + 1, x + 1]) count++; //bottom right
-                    if (universe[y + 1, x]) count++; //bottom
+                    if (universe[x + 1, y]) count++; //right
+                    if (universe[x + 1, y + 1]) count++; //bottom right
+                    if (universe[x, y + 1]) count++; //bottom
                 }
-                else if (x == universe.GetLength(0) - 1)
+                else if (x > 0 && x < universe.GetLength(0))
                 {
 
-                    if (universe[y, x - 1]) count++; //left
-                    if (universe[y + 1, x - 1]) count++; //bottom right
-                    if (universe[y + 1, x]) count++; //bottom
+                    if (universe[x - 1, y]) count++; //left
+                    if (universe[x - 1, y + 1]) count++; //bottom right
+                    if (universe[x, y + 1]) count++; //bottom
                 }
                 else
                 {
-                    if (universe[y, x - 1]) count++; //left
-                    if (universe[y, x + 1]) count++; //right
-                    if (universe[y + 1, x - 1]) count++; //bottom left
-                    if (universe[y + 1, x]) count++; //bottom
-                    if (universe[y + 1, x + 1]) count++; //bottom right;
+                    if (universe[x - 1, y]) count++; //left
+                    if (universe[x + 1, y]) count++; //right
+                    if (universe[x - 1, y + 1]) count++; //bottom left
+                    if (universe[x, y + 1]) count++; //bottom
+                    if (universe[x + 1, y + 1]) count++; //bottom right;
                 }
             } 
             else if (y == universe.GetLength(1) - 1)
@@ -185,55 +193,55 @@ namespace Game_of_Life
                 if (x == 0)
                 {
 
-                    if (universe[y, x + 1]) count++; //right
-                    if (universe[y - 1, x + 1]) count++; //upper right
-                    if (universe[y - 1, x]) count++; //top
-                } else if (x == universe.GetLength(0) - 1)
+                    if (universe[x + 1, y]) count++; //right
+                    if (universe[x + 1, y - 1]) count++; //upper right
+                    if (universe[ x, y - 1]) count++; //top
+                } else if (x > 0 && x < universe.GetLength(0))
                 {
 
-                    if (universe[y, x - 1]) count++; //left
-                    if (universe[y - 1, x - 1]) count++; //upper left
-                    if (universe[y - 1, x]) count++; //top
+                    if (universe[ x - 1, y]) count++; //left
+                    if (universe[x - 1, y - 1]) count++; //upper left
+                    if (universe[x, y - 1]) count++; //top
 
                 } else
                 {
-                    if (universe[y, x - 1]) count++; //left
-                    if (universe[y, x + 1]) count++; //right
-                    if (universe[y - 1, x - 1]) count++; //top left
-                    if (universe[y - 1, x]) count++; //top
-                    if (universe[y - 1, x + 1]) count++; //top right;
+                    if (universe[x - 1, y]) count++; //left
+                    if (universe[x + 1, y]) count++; //right
+                    if (universe[x - 1, y - 1]) count++; //top left
+                    if (universe[x, y - 1]) count++; //top
+                    if (universe[x + 1, y - 1]) count++; //top right;
                 }
             } 
             else
             {
                 if (x == 0)
                 {
-                    if (universe[y -1, x]) count++; //upper
-                    if (universe[y - 1, x + 1]) count++; //upper right
-                    if (universe[y, x + 1]) count++; //right
-                    if (universe[y + 1, x + 1]) count++; //bottom right
-                    if (universe[y + 1, x]) count++; //bottom
+                    if (universe[x, y - 1]) count++; //upper
+                    if (universe[x + 1, y - 1]) count++; //upper right
+                    if (universe[x + 1, y]) count++; //right
+                    if (universe[x + 1, y + 1]) count++; //bottom right
+                    if (universe[x, y + 1]) count++; //bottom
                 }
-                else if (x == universe.GetLength(0) - 1)
+                else if (x > 0 && x < universe.GetLength(0))
                 {
 
-                    if (universe[y - 1, x]) count++; //upper
-                    if (universe[y - 1, x - 1]) count++; //upper left
-                    if (universe[y, x - 1]) count++; //left
-                    if (universe[y + 1, x - 1]) count++; //bottom left
-                    if (universe[y + 1, x]) count++; //bottom
+                    if (universe[x, y - 1]) count++; //upper
+                    if (universe[x - 1, y - 1]) count++; //upper left
+                    if (universe[ x - 1, y]) count++; //left
+                    if (universe[x - 1, y + 1]) count++; //bottom left
+                    if (universe[x, y + 1]) count++; //bottom
 
                 } 
                 else
                 {
-                    if (universe[y - 1, x]) count++; //upper
-                    if (universe[y - 1, x + 1]) count++; //upper right
-                    if (universe[y, x + 1]) count++; //right
-                    if (universe[y + 1, x + 1]) count++; //bottom right
-                    if (universe[y + 1, x]) count++; //bottom
-                    if (universe[y + 1, x - 1]) count++; //bottom left
-                    if (universe[y, x - 1]) count++; //left
-                    if (universe[y - 1, x - 1]) count++; //upper left
+                    if (universe[x, y - 1]) count++; //upper
+                    if (universe[x + 1, y - 1]) count++; //upper right
+                    if (universe[x + 1, y]) count++; //right
+                    if (universe[x + 1, y + 1]) count++; //bottom right
+                    if (universe[x, y + 1]) count++; //bottom
+                    if (universe[x - 1, y + 1]) count++; //bottom left
+                    if (universe[x - 1, y]) count++; //left
+                    if (universe[x - 1, y - 1]) count++; //upper left
                 }
             }
 
@@ -378,6 +386,8 @@ namespace Game_of_Life
         private void generateUniverse()
         {
             universe = new bool[this.universe_width, this.universe_height];
+            this.aliveCellCount = 0;
+            this.generations = 0;
             
             Random rnd = new Random(this.seed);
 
@@ -388,9 +398,13 @@ namespace Game_of_Life
                     int test = rnd.Next(0, 3);
 
                     universe[x, y] = (test == 0);
+
+                    if (universe[x, y]) this.aliveCellCount++;
                 }
             }
 
+
+            this.setAliveCount();
             graphicsPanel1.Invalidate();
         }
 
@@ -462,18 +476,49 @@ namespace Game_of_Life
         private void resetApplication(object sender, EventArgs e)
         {
             Properties.Settings.Default.Reset();
+
+            // Setup the timer
+            timer.Interval = Properties.Settings.Default.interval; // milliseconds
+            timer.Tick += Timer_Tick;
+
+            toolStripStatusLabelInterval.Text = "Interval: " + Properties.Settings.Default.interval;
+            toolStripStatusLabelSeed.Text = "Seed: " + Properties.Settings.Default.seed;
+
+            gridToolStripMenuItem.Checked = Properties.Settings.Default.gridLines;
+            this.gridLines = Properties.Settings.Default.gridLines;
+
+            neighborCountToolStripMenuItem.Checked = Properties.Settings.Default.count;
+            this.neighborCount = Properties.Settings.Default.count;
+
+            hudToolStripMenuItem.Checked = Properties.Settings.Default.hud;
+            this.hudVisible = Properties.Settings.Default.hud;
+
+            this.universe_width = Properties.Settings.Default.universe_width;
+            this.universe_height = Properties.Settings.Default.universe_height;
+
+            this.boundaryMode = Properties.Settings.Default.mode;
+
+            this.seed = Properties.Settings.Default.seed;
+
+            this.aliveCellColor = Properties.Settings.Default.cellColor;
+            this.backgroundColor = Properties.Settings.Default.backColor;
+            this.gridColor = Properties.Settings.Default.gridColor;
+
+            setMenuMode();
+
             graphicsPanel1.Invalidate();
         }
 
         private void clearUniverse(object sender, EventArgs e)
         {
             universe = new bool[this.universe_width, this.universe_height];
-            
-            graphicsPanel1.Invalidate();
-
+            setAliveCount();
             generations = 0;
 
+            graphicsPanel1.Invalidate();
+
             toolStripStatusLabelGenerations.Text = "Generations = " + generations.ToString();
+            toolStripStatusLabelAlive.Text = "Alive: " + aliveCellCount;
         }
 
         private void updateSeed(object sender, EventArgs e)
@@ -535,17 +580,22 @@ namespace Game_of_Life
                 this.universe_height = (int)optionsModal.universeHeight.Value;
 
                 Properties.Settings.Default.Save();
+                updateOptionValues();
             }
 
-            updateOptionValues();
+
         }
 
         private void updateOptionValues()
         {
             universe = new bool[Properties.Settings.Default.universe_width, Properties.Settings.Default.universe_height];
+            setAliveCount();
 
             timer.Interval = Properties.Settings.Default.interval;
             toolStripStatusLabelInterval.Text = "Interval: " + Properties.Settings.Default.interval;
+
+            this.universe_width = Properties.Settings.Default.universe_width;
+            this.universe_height = Properties.Settings.Default.universe_height;
 
             graphicsPanel1.Invalidate();
         }
@@ -555,11 +605,14 @@ namespace Game_of_Life
         {
 
             generateNextGeneration();
+            setAliveCount();
+
             // Increment generation count
             generations++;
 
             // Update status strip generations
             toolStripStatusLabelGenerations.Text = "Generations = " + generations.ToString();
+            toolStripStatusLabelAlive.Text = "Alive: " + this.aliveCellCount.ToString();
         }
 
         // The event called by the timer every Interval milliseconds.
@@ -570,9 +623,6 @@ namespace Game_of_Life
 
         private void graphicsPanel1_Paint(object sender, PaintEventArgs e)
         {
-
-            int alive = 0;
-            HUD.Visible = this.hudVisible;
 
             // Calculate the width and height of each cell in pixels
             // CELL WIDTH = WINDOW WIDTH / NUMBER OF CELLS IN X
@@ -605,22 +655,21 @@ namespace Game_of_Life
                     cellRect.Width = cellWidth;
                     cellRect.Height = cellHeight;
 
-                    
+
 
                     // Fill the cell with a brush if alive
                     if (universe[x, y] == true)
                     {
                         e.Graphics.FillRectangle(cellBrush, cellRect);
-                        alive++;
                     }
 
-                    
+
                     if (this.gridLines)
                     {
                         // Outline the cell with a pen
                         e.Graphics.DrawRectangle(gridPen, cellRect.X, cellRect.Y, cellRect.Width, cellRect.Height);
                     }
-                    
+
                     if (this.neighborCount)
                     {
                         StringFormat stringFormat = new StringFormat();
@@ -651,26 +700,47 @@ namespace Game_of_Life
                             }
                         }
                     }
-                    
+
                 }
             }
 
-            toolStripStatusLabelAlive.Text = "Alive: " + alive;
+            if (hudVisible)
+            {
+                Rectangle hud = Rectangle.Empty;
+                hud.X = 0;
+                hud.Y = 0;
+                hud.Width = graphicsPanel1.Width;
+                hud.Height = graphicsPanel1.Height;
+
+                string hudString = "Timer Interval: " + timer.Interval + "\nGenerations: " + this.generations + "\nCells Alive: " + this.aliveCellCount + "\nBoundary Mode: " + this.boundaryMode + "\nUniverse:\n" + "  Width: " + this.universe_width + "\n  Height: " + this.universe_height;
+
+                Font hudFont = new Font("Sans Serif", 12f);
+
+                e.Graphics.DrawString(hudString, hudFont, deadCell, hud);
+            }
 
             // Cleaning up pens and brushes
             gridPen.Dispose();
             cellBrush.Dispose();
-
-            HUD.ForeColor = Color.FromArgb(255 - backgroundColor.R, 255 - backgroundColor.G, 255 - backgroundColor.B);
-
-            HUDgeneration.Text = "Generation: " + generations;
-            HUDalive.Text = "Alive: " + alive;
-            HUDboundary.Text = "Boundary Mode: " + Properties.Settings.Default.mode;
-            HUDuniverseWidth.Text = "Width: " + Properties.Settings.Default.universe_width.ToString();
-            HUDuniverseHeight.Text = "Height: " + Properties.Settings.Default.universe_height.ToString();
-
-
+            deadCell.Dispose();
+            aliveCell.Dispose();
             
+        }
+
+        private void setAliveCount()
+        {
+            int alive = 0; 
+
+            for (int y = 0; y < universe.GetLength(1); y++)
+            {
+                for (int x = 0; x < universe.GetLength(0); x++)
+                {
+                    if (universe[x, y]) alive++;
+                }
+            }
+
+            this.aliveCellCount = alive;
+            toolStripStatusLabelAlive.Text = "Alive: " + this.aliveCellCount;
         }
 
         private void graphicsPanel1_MouseClick(object sender, MouseEventArgs e)
@@ -690,6 +760,7 @@ namespace Game_of_Life
 
                 // Toggle the cell's state
                 universe[x, y] = !universe[x, y];
+                this.setAliveCount();
 
                 // Tell Windows you need to repaint
                 graphicsPanel1.Invalidate();

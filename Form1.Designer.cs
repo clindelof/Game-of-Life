@@ -82,17 +82,9 @@
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.saveFileDialog2 = new System.Windows.Forms.SaveFileDialog();
             this.graphicsPanel1 = new Game_of_Life.GraphicsPanel();
-            this.HUD = new System.Windows.Forms.Panel();
-            this.HUDuniverseHeight = new System.Windows.Forms.Label();
-            this.HUDuniverseWidth = new System.Windows.Forms.Label();
-            this.HUDboundary = new System.Windows.Forms.Label();
-            this.HUDalive = new System.Windows.Forms.Label();
-            this.HUDgeneration = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
-            this.graphicsPanel1.SuspendLayout();
-            this.HUD.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -500,7 +492,6 @@
             // 
             this.graphicsPanel1.AutoSize = true;
             this.graphicsPanel1.BackColor = System.Drawing.SystemColors.Window;
-            this.graphicsPanel1.Controls.Add(this.HUD);
             this.graphicsPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.graphicsPanel1.Location = new System.Drawing.Point(0, 49);
             this.graphicsPanel1.Name = "graphicsPanel1";
@@ -508,88 +499,6 @@
             this.graphicsPanel1.TabIndex = 3;
             this.graphicsPanel1.Paint += new System.Windows.Forms.PaintEventHandler(this.graphicsPanel1_Paint);
             this.graphicsPanel1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.graphicsPanel1_MouseClick);
-            // 
-            // HUD
-            // 
-            this.HUD.AutoSize = true;
-            this.HUD.BackColor = System.Drawing.Color.Transparent;
-            this.HUD.Controls.Add(this.HUDuniverseHeight);
-            this.HUD.Controls.Add(this.HUDuniverseWidth);
-            this.HUD.Controls.Add(this.HUDboundary);
-            this.HUD.Controls.Add(this.HUDalive);
-            this.HUD.Controls.Add(this.HUDgeneration);
-            this.HUD.Dock = System.Windows.Forms.DockStyle.Top;
-            this.HUD.Location = new System.Drawing.Point(0, 0);
-            this.HUD.Name = "HUD";
-            this.HUD.Size = new System.Drawing.Size(573, 85);
-            this.HUD.TabIndex = 8;
-            this.HUD.MouseClick += new System.Windows.Forms.MouseEventHandler(this.graphicsPanel1_MouseClick);
-            // 
-            // HUDuniverseHeight
-            // 
-            this.HUDuniverseHeight.AutoSize = true;
-            this.HUDuniverseHeight.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.HUDuniverseHeight.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.HUDuniverseHeight.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.HUDuniverseHeight.Location = new System.Drawing.Point(0, 0);
-            this.HUDuniverseHeight.Name = "HUDuniverseHeight";
-            this.HUDuniverseHeight.Size = new System.Drawing.Size(109, 17);
-            this.HUDuniverseHeight.TabIndex = 4;
-            this.HUDuniverseHeight.Text = "Universe Height";
-            this.HUDuniverseHeight.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.HUDuniverseHeight.MouseClick += new System.Windows.Forms.MouseEventHandler(this.graphicsPanel1_MouseClick);
-            // 
-            // HUDuniverseWidth
-            // 
-            this.HUDuniverseWidth.AutoSize = true;
-            this.HUDuniverseWidth.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.HUDuniverseWidth.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.HUDuniverseWidth.Location = new System.Drawing.Point(0, 17);
-            this.HUDuniverseWidth.Name = "HUDuniverseWidth";
-            this.HUDuniverseWidth.Size = new System.Drawing.Size(104, 17);
-            this.HUDuniverseWidth.TabIndex = 3;
-            this.HUDuniverseWidth.Text = "Universe Width";
-            this.HUDuniverseWidth.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.HUDuniverseWidth.MouseClick += new System.Windows.Forms.MouseEventHandler(this.graphicsPanel1_MouseClick);
-            // 
-            // HUDboundary
-            // 
-            this.HUDboundary.AutoSize = true;
-            this.HUDboundary.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.HUDboundary.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.HUDboundary.Location = new System.Drawing.Point(0, 34);
-            this.HUDboundary.Name = "HUDboundary";
-            this.HUDboundary.Size = new System.Drawing.Size(112, 17);
-            this.HUDboundary.TabIndex = 2;
-            this.HUDboundary.Text = "Boundary Mode:";
-            this.HUDboundary.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.HUDboundary.MouseClick += new System.Windows.Forms.MouseEventHandler(this.graphicsPanel1_MouseClick);
-            // 
-            // HUDalive
-            // 
-            this.HUDalive.AutoSize = true;
-            this.HUDalive.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.HUDalive.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.HUDalive.Location = new System.Drawing.Point(0, 51);
-            this.HUDalive.Name = "HUDalive";
-            this.HUDalive.Size = new System.Drawing.Size(42, 17);
-            this.HUDalive.TabIndex = 1;
-            this.HUDalive.Text = "Alive:";
-            this.HUDalive.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.HUDalive.MouseClick += new System.Windows.Forms.MouseEventHandler(this.graphicsPanel1_MouseClick);
-            // 
-            // HUDgeneration
-            // 
-            this.HUDgeneration.AutoSize = true;
-            this.HUDgeneration.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.HUDgeneration.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.HUDgeneration.Location = new System.Drawing.Point(0, 68);
-            this.HUDgeneration.Name = "HUDgeneration";
-            this.HUDgeneration.Size = new System.Drawing.Size(83, 17);
-            this.HUDgeneration.TabIndex = 0;
-            this.HUDgeneration.Text = "Generation:";
-            this.HUDgeneration.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.HUDgeneration.MouseClick += new System.Windows.Forms.MouseEventHandler(this.graphicsPanel1_MouseClick);
             // 
             // Form1
             // 
@@ -612,10 +521,6 @@
             this.toolStrip1.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
-            this.graphicsPanel1.ResumeLayout(false);
-            this.graphicsPanel1.PerformLayout();
-            this.HUD.ResumeLayout(false);
-            this.HUD.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -676,12 +581,6 @@
         private System.Windows.Forms.ColorDialog colorDialog1;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.SaveFileDialog saveFileDialog2;
-        private System.Windows.Forms.Panel HUD;
-        private System.Windows.Forms.Label HUDuniverseHeight;
-        private System.Windows.Forms.Label HUDuniverseWidth;
-        private System.Windows.Forms.Label HUDboundary;
-        private System.Windows.Forms.Label HUDalive;
-        private System.Windows.Forms.Label HUDgeneration;
     }
 }
 

@@ -168,273 +168,6 @@ namespace Game_of_Life
             graphicsPanel1.Invalidate();
         }
 
-        /// <summary>
-        /// Determine the number of living cells neighboring a cell based of the x and y coordinate in the universe.
-        /// The edge of the universe is considered dead with the function.
-        /// </summary>
-        /// <param name="x">The x value of the cell</param>
-        /// <param name="y">The y value of the cell</param>
-        /// <returns>the count of living cells neighboring the cell in question as an integer between 0 and 8</returns>
-        private int finiteNeighbors(int x, int y)
-        {
-            int count = 0;
-
-            if (y == 0)
-            {
-                if (x == 0)
-                {
-
-                    if (universe[x + 1, y]) count++; //right
-                    if (universe[x + 1, y + 1]) count++; //bottom right
-                    if (universe[x, y + 1]) count++; //bottom
-                }
-                else if (x > 0 && x < universe.GetLength(0))
-                {
-
-                    if (universe[x - 1, y]) count++; //left
-                    if (universe[x - 1, y + 1]) count++; //bottom right
-                    if (universe[x, y + 1]) count++; //bottom
-                }
-                else
-                {
-                    if (universe[x - 1, y]) count++; //left
-                    if (universe[x + 1, y]) count++; //right
-                    if (universe[x - 1, y + 1]) count++; //bottom left
-                    if (universe[x, y + 1]) count++; //bottom
-                    if (universe[x + 1, y + 1]) count++; //bottom right;
-                }
-            } 
-            else if (y == universe.GetLength(1) - 1)
-            {
-
-                if (x == 0)
-                {
-
-                    if (universe[x + 1, y]) count++; //right
-                    if (universe[x + 1, y - 1]) count++; //upper right
-                    if (universe[ x, y - 1]) count++; //top
-                } else if (x > 0 && x < universe.GetLength(0))
-                {
-
-                    if (universe[ x - 1, y]) count++; //left
-                    if (universe[x - 1, y - 1]) count++; //upper left
-                    if (universe[x, y - 1]) count++; //top
-
-                } else
-                {
-                    if (universe[x - 1, y]) count++; //left
-                    if (universe[x + 1, y]) count++; //right
-                    if (universe[x - 1, y - 1]) count++; //top left
-                    if (universe[x, y - 1]) count++; //top
-                    if (universe[x + 1, y - 1]) count++; //top right;
-                }
-            } 
-            else
-            {
-                if (x == 0)
-                {
-                    if (universe[x, y - 1]) count++; //upper
-                    if (universe[x + 1, y - 1]) count++; //upper right
-                    if (universe[x + 1, y]) count++; //right
-                    if (universe[x + 1, y + 1]) count++; //bottom right
-                    if (universe[x, y + 1]) count++; //bottom
-                }
-                else if (x > 0 && x < universe.GetLength(0))
-                {
-
-                    if (universe[x, y - 1]) count++; //upper
-                    if (universe[x - 1, y - 1]) count++; //upper left
-                    if (universe[ x - 1, y]) count++; //left
-                    if (universe[x - 1, y + 1]) count++; //bottom left
-                    if (universe[x, y + 1]) count++; //bottom
-
-                } 
-                else
-                {
-                    if (universe[x, y - 1]) count++; //upper
-                    if (universe[x + 1, y - 1]) count++; //upper right
-                    if (universe[x + 1, y]) count++; //right
-                    if (universe[x + 1, y + 1]) count++; //bottom right
-                    if (universe[x, y + 1]) count++; //bottom
-                    if (universe[x - 1, y + 1]) count++; //bottom left
-                    if (universe[x - 1, y]) count++; //left
-                    if (universe[x - 1, y - 1]) count++; //upper left
-                }
-            }
-
-
-            return count;
-        }
-
-        /// <summary>
-        /// Determine the number of living cells neighboring a cell based of the x and y coordinate in the universe.
-        /// The edge of the universe wraps around to the other side of the universe, edges go to the opposite edge, corners go to the opposite corner across the universe.
-        /// </summary>
-        /// <param name="x">The x value of the cell</param>
-        /// <param name="y">The y value of the cell</param>
-        /// <returns>the count of living cells neighboring the cell in question as an integer between 0 and 8</returns>
-        private int toroidalNeighbors(int x, int y)
-        {
-            int count = 0;
-
-            if (y == 0)
-            {
-                if (universe[x, universe.GetLength(1) - 1]) count++; //opposite end of column
-
-                if (x == 0)
-                {
-                    if (universe[universe.GetLength(0) - 1, y]) count++; //opposite end of row
-                    if (universe[universe.GetLength(0) - 1, y + 1]) count++; //opposite end of next row down
-
-                    if (universe[x +1, universe.GetLength(1) - 1]) count++; //opposite end of column to the right
-
-                    if (universe[universe.GetLength(0) - 1, universe.GetLength(1) - 1]) count++; //opposite corner of universe
-
-                    if (universe[x + 1, y]) count++; //right
-                    if (universe[x + 1, y + 1]) count++; //bottom right
-                    if (universe[x, y + 1]) count++; //bottom
-                }
-                else if (x == universe.GetLength(0) - 1)
-                {
-                    if (universe[0, y]) count++; //opposite end of row
-                    if (universe[ 0, y + 1]) count++; //opposite end of next row down
-
-                    if (universe[x - 1, universe.GetLength(1) - 1]) count++; //opposite end of column to the left
-
-                    if (universe[0, universe.GetLength(1) - 1]) count++; //opposite corner of universe
-
-                    if (universe[x - 1, y]) count++; //left
-                    if (universe[x - 1, y + 1]) count++; //bottom left
-                    if (universe[x, y + 1]) count++; //bottom
-                }
-                else
-                {
-                    if (universe[x - 1, universe.GetLength(1) - 1]) count++; //opposite end of column to the left
-                    if (universe[x + 1, universe.GetLength(1) - 1]) count++; //opposite end of column to the right
-
-                    if (universe[x - 1,y]) count++; //left
-                    if (universe[x + 1,y]) count++; //right
-                    if (universe[x - 1, y + 1]) count++; //bottom left
-                    if (universe[ x, y + 1]) count++; //bottom
-                    if (universe[x + 1, y + 1]) count++; //bottom right;
-                }
-            }
-            else if (y == universe.GetLength(1) - 1)
-            {
-
-                if (universe[x, 0]) count++; //opposite end of column
-
-                if (x == 0)
-                {
-                    if (universe[universe.GetLength(0) - 1, y]) count++; //opposite end of row
-                    if (universe[universe.GetLength(0) - 1, y - 1]) count++; //opposite end of next row up
-
-                    if (universe[universe.GetLength(0) - 1, 0]) count++; //opposite corner of universe
-                    if (universe[0, x + 1]) count++; //opposite end of column to the right
-
-                    if (universe[x + 1, y]) count++; //right
-                    if (universe[x + 1, y - 1]) count++; //upper right
-                    if (universe[ x, y - 1]) count++; //top
-                }
-                else if (x == universe.GetLength(0) - 1)
-                {
-                    if (universe[0, y]) count++; //opposite end of row
-                    if (universe[0, y - 1]) count++; //opposite end of next row up
-
-                    if (universe[x -1, 0]) count++; //opposite end of column to the left
-
-                    if (universe[0, 0]) count++; //opposite corner of universe
-
-                    if (universe[x - 1 , y ]) count++; //left
-                    if (universe[ x - 1, y - 1]) count++; //upper left
-                    if (universe[x, y - 1]) count++; //top
-
-                }
-                else
-                {
-                    if (universe[x - 1, 0]) count++; //opposite end of column to the left
-                    if (universe[ x + 1, 0]) count++; //opposite end of column to the right
-
-                    if (universe[x - 1, y]) count++; //left
-                    if (universe[ x + 1, y]) count++; //right
-                    if (universe[x - 1, y - 1]) count++; //top left
-                    if (universe[x, y - 1]) count++; //top
-                    if (universe[x + 1, y - 1]) count++; //top right;
-                }
-            }
-            else
-            {
-                if (x == 0)
-                {
-
-                    if (universe[universe.GetLength(0) - 1, y]) count++; //opposite end of row
-                    if (universe[universe.GetLength(0) - 1, y + 1 ]) count++; //opposite end of row down
-                    if (universe[universe.GetLength(0) - 1, y - 1 ]) count++; //opposite end of row up
-
-                    if (universe[x, y - 1]) count++; //upper
-                    if (universe[x + 1, y - 1]) count++; //upper right
-                    if (universe[x + 1, y]) count++; //right
-                    if (universe[x + 1, y + 1]) count++; //bottom right
-                    if (universe[x, y + 1]) count++; //bottom
-                }
-                else if (x == universe.GetLength(0) - 1)
-                {
-                    if (universe[0, y]) count++; //opposite end of row
-                    if (universe[0, y + 1]) count++; //opposite end of row down
-                    if (universe[0, y - 1]) count++; //opposite end of row up
-
-                    if (universe[x, y - 1]) count++; //upper
-                    if (universe[x - 1, y - 1]) count++; //upper left
-                    if (universe[x - 1, y]) count++; //left
-                    if (universe[x - 1, y + 1]) count++; //bottom left
-                    if (universe[x, y + 1]) count++; //bottom
-
-                }
-                else
-                {
-                    if (universe[x, y - 1]) count++; //upper
-                    if (universe[x + 1, y - 1]) count++; //upper right
-                    if (universe[x + 1, y]) count++; //right
-                    if (universe[x + 1, y + 1]) count++; //bottom right
-                    if (universe[x, y + 1]) count++; //bottom
-                    if (universe[x - 1, y + 1]) count++; //bottom left
-                    if (universe[x - 1, y]) count++; //left
-                    if (universe[x - 1, y - 1]) count++; //upper left
-                }
-            }
-
-
-            return count;
-        }
-
-        /// <summary>
-        /// randomly generate universe using the seed member variable to seed the random number generator.
-        /// if the random number generated % 2 is 0, the cell is alive otherwise it is dead.
-        /// </summary>
-        private void generateUniverse()
-        {
-            universe = new bool[this.universe_width, this.universe_height];
-            this.aliveCellCount = 0;
-            this.generations = 0;
-            
-            Random rnd = new Random(this.seed);
-
-            for (int y = 0; y < universe.GetLength(1); y++)
-            {
-                for (int x = 0; x < universe.GetLength(0); x++)
-                {
-                    int test = rnd.Next(0, 3);
-
-                    universe[x, y] = (test == 0);
-
-                    if (universe[x, y]) this.aliveCellCount++;
-                }
-            }
-
-
-            this.setAliveCount();
-            graphicsPanel1.Invalidate();
-        }
 
         /// <summary>
         /// set the boundary mode menu options checked values then cause the universe to be redrawn to account for the change in boundary behavior
@@ -461,6 +194,8 @@ namespace Game_of_Life
             Properties.Settings.Default.Save();
             graphicsPanel1.Invalidate();
         }
+
+
 
         /// <summary>
         /// function called when menu color option items are clicked, updates the values of the specific color option and causes the redraw of the universe
@@ -495,64 +230,6 @@ namespace Game_of_Life
 
                 graphicsPanel1.Invalidate();
             }
-        }
-
-        /// <summary>
-        /// Reset application to last saved settings.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void resetApplication(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.Reset();
-
-            // Setup the timer
-            timer.Interval = Properties.Settings.Default.interval; // milliseconds
-            timer.Tick += Timer_Tick;
-
-            toolStripStatusLabelInterval.Text = "Interval: " + Properties.Settings.Default.interval;
-            toolStripStatusLabelSeed.Text = "Seed: " + Properties.Settings.Default.seed;
-
-            gridToolStripMenuItem.Checked = Properties.Settings.Default.gridLines;
-            this.gridLines = Properties.Settings.Default.gridLines;
-
-            neighborCountToolStripMenuItem.Checked = Properties.Settings.Default.count;
-            this.neighborCount = Properties.Settings.Default.count;
-
-            hudToolStripMenuItem.Checked = Properties.Settings.Default.hud;
-            this.hudVisible = Properties.Settings.Default.hud;
-
-            this.universe_width = Properties.Settings.Default.universe_width;
-            this.universe_height = Properties.Settings.Default.universe_height;
-
-            this.boundaryMode = Properties.Settings.Default.mode;
-            toroidalToolStripMenuItem.Checked = (this.boundaryMode == "Toroidal");
-            finiteToolStripMenuItem.Checked = (this.boundaryMode == "Finite");
-
-            this.seed = Properties.Settings.Default.seed;
-
-            this.aliveCellColor = Properties.Settings.Default.cellColor;
-            this.backgroundColor = Properties.Settings.Default.backColor;
-            this.gridColor = Properties.Settings.Default.gridColor;
-
-            graphicsPanel1.Invalidate();
-        }
-
-        /// <summary>
-        /// Clear universe, reset generations, and set alive count
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void clearUniverse(object sender, EventArgs e)
-        {
-            universe = new bool[this.universe_width, this.universe_height];
-            setAliveCount();
-            generations = 0;
-
-            graphicsPanel1.Invalidate();
-
-            toolStripStatusLabelGenerations.Text = "Generations = " + generations.ToString();
-            toolStripStatusLabelAlive.Text = "Alive: " + aliveCellCount;
         }
 
         /// <summary>
@@ -611,6 +288,97 @@ namespace Game_of_Life
             generateUniverse();
         }
 
+
+        
+
+
+        /// <summary>
+        /// randomly generate universe using the seed member variable to seed the random number generator.
+        /// if the random number generated % 2 is 0, the cell is alive otherwise it is dead.
+        /// </summary>
+        private void generateUniverse()
+        {
+            universe = new bool[this.universe_width, this.universe_height];
+            this.aliveCellCount = 0;
+            this.generations = 0;
+            
+            Random rnd = new Random(this.seed);
+
+            for (int y = 0; y < universe.GetLength(1); y++)
+            {
+                for (int x = 0; x < universe.GetLength(0); x++)
+                {
+                    int test = rnd.Next(0, 3);
+
+                    universe[x, y] = (test == 0);
+
+                    if (universe[x, y]) this.aliveCellCount++;
+                }
+            }
+
+
+            this.setAliveCount();
+            graphicsPanel1.Invalidate();
+        }
+
+        /// <summary>
+        /// Clear universe, reset generations, and set alive count
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void clearUniverse(object sender, EventArgs e)
+        {
+            universe = new bool[this.universe_width, this.universe_height];
+            setAliveCount();
+            generations = 0;
+
+            graphicsPanel1.Invalidate();
+
+            toolStripStatusLabelGenerations.Text = "Generations = " + generations.ToString();
+            toolStripStatusLabelAlive.Text = "Alive: " + aliveCellCount;
+        }
+
+        /// <summary>
+        /// Reset application to last saved settings.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void resetApplication(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.Reset();
+
+            // Setup the timer
+            timer.Interval = Properties.Settings.Default.interval; // milliseconds
+            timer.Tick += Timer_Tick;
+
+            toolStripStatusLabelInterval.Text = "Interval: " + Properties.Settings.Default.interval;
+            toolStripStatusLabelSeed.Text = "Seed: " + Properties.Settings.Default.seed;
+
+            gridToolStripMenuItem.Checked = Properties.Settings.Default.gridLines;
+            this.gridLines = Properties.Settings.Default.gridLines;
+
+            neighborCountToolStripMenuItem.Checked = Properties.Settings.Default.count;
+            this.neighborCount = Properties.Settings.Default.count;
+
+            hudToolStripMenuItem.Checked = Properties.Settings.Default.hud;
+            this.hudVisible = Properties.Settings.Default.hud;
+
+            this.universe_width = Properties.Settings.Default.universe_width;
+            this.universe_height = Properties.Settings.Default.universe_height;
+
+            this.boundaryMode = Properties.Settings.Default.mode;
+            toroidalToolStripMenuItem.Checked = (this.boundaryMode == "Toroidal");
+            finiteToolStripMenuItem.Checked = (this.boundaryMode == "Finite");
+
+            this.seed = Properties.Settings.Default.seed;
+
+            this.aliveCellColor = Properties.Settings.Default.cellColor;
+            this.backgroundColor = Properties.Settings.Default.backColor;
+            this.gridColor = Properties.Settings.Default.gridColor;
+
+            graphicsPanel1.Invalidate();
+        }
+
         /// <summary>
         /// Open the options modal, save user input and then regenerate and redraw the universe.
         /// </summary>
@@ -648,6 +416,14 @@ namespace Game_of_Life
             }
 
 
+        }
+
+        /// <summary>
+        /// The event called by the timer every Interval milliseconds.
+        /// </summary>
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            NextGeneration();
         }
 
         /// <summary>
@@ -712,11 +488,263 @@ namespace Game_of_Life
         }
 
         /// <summary>
-        /// The event called by the timer every Interval milliseconds.
+        /// Determine the number of living cells neighboring a cell based of the x and y coordinate in the universe.
+        /// The edge of the universe is considered dead with the function.
         /// </summary>
-        private void Timer_Tick(object sender, EventArgs e)
+        /// <param name="x">The x value of the cell</param>
+        /// <param name="y">The y value of the cell</param>
+        /// <returns>the count of living cells neighboring the cell in question as an integer between 0 and 8</returns>
+        private int finiteNeighbors(int x, int y)
         {
-            NextGeneration();
+            int count = 0;
+
+            if (y == 0)
+            {
+                if (x == 0)
+                {
+
+                    if (universe[x + 1, y]) count++; //right
+                    if (universe[x + 1, y + 1]) count++; //bottom right
+                    if (universe[x, y + 1]) count++; //bottom
+                }
+                else if (x > 0 && x < universe.GetLength(0))
+                {
+
+                    if (universe[x - 1, y]) count++; //left
+                    if (universe[x - 1, y + 1]) count++; //bottom right
+                    if (universe[x, y + 1]) count++; //bottom
+                }
+                else
+                {
+                    if (universe[x - 1, y]) count++; //left
+                    if (universe[x + 1, y]) count++; //right
+                    if (universe[x - 1, y + 1]) count++; //bottom left
+                    if (universe[x, y + 1]) count++; //bottom
+                    if (universe[x + 1, y + 1]) count++; //bottom right;
+                }
+            }
+            else if (y == universe.GetLength(1) - 1)
+            {
+
+                if (x == 0)
+                {
+
+                    if (universe[x + 1, y]) count++; //right
+                    if (universe[x + 1, y - 1]) count++; //upper right
+                    if (universe[x, y - 1]) count++; //top
+                }
+                else if (x > 0 && x < universe.GetLength(0))
+                {
+
+                    if (universe[x - 1, y]) count++; //left
+                    if (universe[x - 1, y - 1]) count++; //upper left
+                    if (universe[x, y - 1]) count++; //top
+
+                }
+                else
+                {
+                    if (universe[x - 1, y]) count++; //left
+                    if (universe[x + 1, y]) count++; //right
+                    if (universe[x - 1, y - 1]) count++; //top left
+                    if (universe[x, y - 1]) count++; //top
+                    if (universe[x + 1, y - 1]) count++; //top right;
+                }
+            }
+            else
+            {
+                if (x == 0)
+                {
+                    if (universe[x, y - 1]) count++; //upper
+                    if (universe[x + 1, y - 1]) count++; //upper right
+                    if (universe[x + 1, y]) count++; //right
+                    if (universe[x + 1, y + 1]) count++; //bottom right
+                    if (universe[x, y + 1]) count++; //bottom
+                }
+                else if (x > 0 && x < universe.GetLength(0))
+                {
+
+                    if (universe[x, y - 1]) count++; //upper
+                    if (universe[x - 1, y - 1]) count++; //upper left
+                    if (universe[x - 1, y]) count++; //left
+                    if (universe[x - 1, y + 1]) count++; //bottom left
+                    if (universe[x, y + 1]) count++; //bottom
+
+                }
+                else
+                {
+                    if (universe[x, y - 1]) count++; //upper
+                    if (universe[x + 1, y - 1]) count++; //upper right
+                    if (universe[x + 1, y]) count++; //right
+                    if (universe[x + 1, y + 1]) count++; //bottom right
+                    if (universe[x, y + 1]) count++; //bottom
+                    if (universe[x - 1, y + 1]) count++; //bottom left
+                    if (universe[x - 1, y]) count++; //left
+                    if (universe[x - 1, y - 1]) count++; //upper left
+                }
+            }
+
+
+            return count;
+        }
+
+        /// <summary>
+        /// Determine the number of living cells neighboring a cell based of the x and y coordinate in the universe.
+        /// The edge of the universe wraps around to the other side of the universe, edges go to the opposite edge, corners go to the opposite corner across the universe.
+        /// </summary>
+        /// <param name="x">The x value of the cell</param>
+        /// <param name="y">The y value of the cell</param>
+        /// <returns>the count of living cells neighboring the cell in question as an integer between 0 and 8</returns>
+        private int toroidalNeighbors(int x, int y)
+        {
+            int count = 0;
+
+            if (y == 0)
+            {
+                if (universe[x, universe.GetLength(1) - 1]) count++; //opposite end of column
+
+                if (x == 0)
+                {
+                    if (universe[universe.GetLength(0) - 1, y]) count++; //opposite end of row
+                    if (universe[universe.GetLength(0) - 1, y + 1]) count++; //opposite end of next row down
+
+                    if (universe[x + 1, universe.GetLength(1) - 1]) count++; //opposite end of column to the right
+
+                    if (universe[universe.GetLength(0) - 1, universe.GetLength(1) - 1]) count++; //opposite corner of universe
+
+                    if (universe[x + 1, y]) count++; //right
+                    if (universe[x + 1, y + 1]) count++; //bottom right
+                    if (universe[x, y + 1]) count++; //bottom
+                }
+                else if (x == universe.GetLength(0) - 1)
+                {
+                    if (universe[0, y]) count++; //opposite end of row
+                    if (universe[0, y + 1]) count++; //opposite end of next row down
+
+                    if (universe[x - 1, universe.GetLength(1) - 1]) count++; //opposite end of column to the left
+
+                    if (universe[0, universe.GetLength(1) - 1]) count++; //opposite corner of universe
+
+                    if (universe[x - 1, y]) count++; //left
+                    if (universe[x - 1, y + 1]) count++; //bottom left
+                    if (universe[x, y + 1]) count++; //bottom
+                }
+                else
+                {
+                    if (universe[x - 1, universe.GetLength(1) - 1]) count++; //opposite end of column to the left
+                    if (universe[x + 1, universe.GetLength(1) - 1]) count++; //opposite end of column to the right
+
+                    if (universe[x - 1, y]) count++; //left
+                    if (universe[x + 1, y]) count++; //right
+                    if (universe[x - 1, y + 1]) count++; //bottom left
+                    if (universe[x, y + 1]) count++; //bottom
+                    if (universe[x + 1, y + 1]) count++; //bottom right;
+                }
+            }
+            else if (y == universe.GetLength(1) - 1)
+            {
+
+                if (universe[x, 0]) count++; //opposite end of column
+
+                if (x == 0)
+                {
+                    if (universe[universe.GetLength(0) - 1, y]) count++; //opposite end of row
+                    if (universe[universe.GetLength(0) - 1, y - 1]) count++; //opposite end of next row up
+
+                    if (universe[universe.GetLength(0) - 1, 0]) count++; //opposite corner of universe
+                    if (universe[0, x + 1]) count++; //opposite end of column to the right
+
+                    if (universe[x + 1, y]) count++; //right
+                    if (universe[x + 1, y - 1]) count++; //upper right
+                    if (universe[x, y - 1]) count++; //top
+                }
+                else if (x == universe.GetLength(0) - 1)
+                {
+                    if (universe[0, y]) count++; //opposite end of row
+                    if (universe[0, y - 1]) count++; //opposite end of next row up
+
+                    if (universe[x - 1, 0]) count++; //opposite end of column to the left
+
+                    if (universe[0, 0]) count++; //opposite corner of universe
+
+                    if (universe[x - 1, y]) count++; //left
+                    if (universe[x - 1, y - 1]) count++; //upper left
+                    if (universe[x, y - 1]) count++; //top
+
+                }
+                else
+                {
+                    if (universe[x - 1, 0]) count++; //opposite end of column to the left
+                    if (universe[x + 1, 0]) count++; //opposite end of column to the right
+
+                    if (universe[x - 1, y]) count++; //left
+                    if (universe[x + 1, y]) count++; //right
+                    if (universe[x - 1, y - 1]) count++; //top left
+                    if (universe[x, y - 1]) count++; //top
+                    if (universe[x + 1, y - 1]) count++; //top right;
+                }
+            }
+            else
+            {
+                if (x == 0)
+                {
+
+                    if (universe[universe.GetLength(0) - 1, y]) count++; //opposite end of row
+                    if (universe[universe.GetLength(0) - 1, y + 1]) count++; //opposite end of row down
+                    if (universe[universe.GetLength(0) - 1, y - 1]) count++; //opposite end of row up
+
+                    if (universe[x, y - 1]) count++; //upper
+                    if (universe[x + 1, y - 1]) count++; //upper right
+                    if (universe[x + 1, y]) count++; //right
+                    if (universe[x + 1, y + 1]) count++; //bottom right
+                    if (universe[x, y + 1]) count++; //bottom
+                }
+                else if (x == universe.GetLength(0) - 1)
+                {
+                    if (universe[0, y]) count++; //opposite end of row
+                    if (universe[0, y + 1]) count++; //opposite end of row down
+                    if (universe[0, y - 1]) count++; //opposite end of row up
+
+                    if (universe[x, y - 1]) count++; //upper
+                    if (universe[x - 1, y - 1]) count++; //upper left
+                    if (universe[x - 1, y]) count++; //left
+                    if (universe[x - 1, y + 1]) count++; //bottom left
+                    if (universe[x, y + 1]) count++; //bottom
+
+                }
+                else
+                {
+                    if (universe[x, y - 1]) count++; //upper
+                    if (universe[x + 1, y - 1]) count++; //upper right
+                    if (universe[x + 1, y]) count++; //right
+                    if (universe[x + 1, y + 1]) count++; //bottom right
+                    if (universe[x, y + 1]) count++; //bottom
+                    if (universe[x - 1, y + 1]) count++; //bottom left
+                    if (universe[x - 1, y]) count++; //left
+                    if (universe[x - 1, y - 1]) count++; //upper left
+                }
+            }
+
+
+            return count;
+        }
+
+        /// <summary>
+        /// update the alive count member variable, and the status bar alive count
+        /// </summary>
+        private void setAliveCount()
+        {
+            int alive = 0;
+
+            for (int y = 0; y < universe.GetLength(1); y++)
+            {
+                for (int x = 0; x < universe.GetLength(0); x++)
+                {
+                    if (universe[x, y]) alive++;
+                }
+            }
+
+            this.aliveCellCount = alive;
+            toolStripStatusLabelAlive.Text = "Alive: " + this.aliveCellCount;
         }
 
         /// <summary>
@@ -828,25 +856,6 @@ namespace Game_of_Life
             deadCell.Dispose();
             aliveCell.Dispose();
             
-        }
-
-        /// <summary>
-        /// update the alive count member variable, and the status bar alive count
-        /// </summary>
-        private void setAliveCount()
-        {
-            int alive = 0; 
-
-            for (int y = 0; y < universe.GetLength(1); y++)
-            {
-                for (int x = 0; x < universe.GetLength(0); x++)
-                {
-                    if (universe[x, y]) alive++;
-                }
-            }
-
-            this.aliveCellCount = alive;
-            toolStripStatusLabelAlive.Text = "Alive: " + this.aliveCellCount;
         }
 
         /// <summary>

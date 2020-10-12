@@ -50,7 +50,6 @@
             this.cancel.TabIndex = 0;
             this.cancel.Text = "Cancel";
             this.cancel.UseVisualStyleBackColor = true;
-            this.cancel.Click += new System.EventHandler(this.button1_Click);
             // 
             // ok
             // 
@@ -71,7 +70,6 @@
             this.label1.Size = new System.Drawing.Size(189, 17);
             this.label1.TabIndex = 2;
             this.label1.Text = "Timer Interval in Milliseconds";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // label2
             // 
@@ -138,7 +136,6 @@
             this.Name = "OptionsModal";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Options";
-            this.Load += new System.EventHandler(this.OptionsModal_Load);
             ((System.ComponentModel.ISupportInitialize)(this.interval)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.universeWidth)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.universeHeight)).EndInit();

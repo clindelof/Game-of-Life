@@ -7,40 +7,75 @@ using System.Data.SqlTypes;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Game_of_Life
 {
+    ///<summary>
+    /// This class contains all the members and functions that define the main form for the Game of Life application.
+    ///<summary>
     public partial class Form1 : Form
     {
-        // The universe array
+        /// <summary>
+        /// The universe array that the paint function utilizes to display the game of life
+        /// </summary>
         bool[,] universe = new bool[Properties.Settings.Default.universe_width, Properties.Settings.Default.universe_height];
 
-        // The Timer class
+        /// <summary>
+        /// The timer that controlls the pace of Game of Life
+        /// </summary>
         Timer timer = new Timer();
 
-        // Generation count
+        /// <summary>
+        /// How many generations have been processed by the Game of Life
+        /// </summary>
         int generations = 0;
 
+        /// <summary>
+        /// Dimensions of the universe
+        /// </summary>
         int universe_width;
         int universe_height;
 
+        /// <summary>
+        /// The seed used to seed the random number generator used to populate the universe
+        /// </summary>
         int seed;
 
+        /// <summary>
+        /// Count of "alive" cells in the universe
+        /// </summary>
         int aliveCellCount = 0;
 
+        /// <summary>
+        /// Colors used for background, "living" cells, and the background of the universe
+        /// </summary>
         Color aliveCellColor;
         Color backgroundColor;
         Color gridColor;
 
+        /// <summary>
+        /// What mode the universe boundary is set to
+        /// </summary>
+        /// <remarks>
+        /// This can be set to "Toroidal" or "Finite"
+        /// </remarks>
         string boundaryMode;
 
+        /// <summary>
+        /// Boolean values for whether to display the grid lines, the count of alive neighbors for each cell, and the heads up display - HUD
+        /// </summary>
         bool gridLines;
         bool neighborCount;
         bool hudVisible;
 
+
+        /// <summary>
+        /// Set all members and status labels to the values stored in settings.
+        /// </summary>
         public Form1()
         {
             InitializeComponent();
@@ -50,7 +85,7 @@ namespace Game_of_Life
             timer.Interval = Properties.Settings.Default.interval; // milliseconds
             timer.Tick += Timer_Tick;
 
-            toolStripStatusLabelInterval.Text = "Interval: " + Properties.Settings.Default.interval;
+            toolStripStatusLabelInterval.Text = "Interval: " + Properties.Settings.Default.interval; 
             toolStripStatusLabelSeed.Text = "Seed: " + Properties.Settings.Default.seed;
 
             gridToolStripMenuItem.Checked = Properties.Settings.Default.gridLines;
@@ -73,9 +108,14 @@ namespace Game_of_Life
             this.backgroundColor = Properties.Settings.Default.backColor;
             this.gridColor = Properties.Settings.Default.gridColor;
 
-            setMenuMode();
         }
 
+        /// <summary>
+        /// Function called by clicking on the neighbor count menu item, alternates the visibility of the neighbor count for each cell.
+        /// Sets the values of the preferences for persistence, the member variable for application use, and sets whether the menu item is checked
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void toggleNeighborCount(object sender, EventArgs e)
         {
             Properties.Settings.Default.count = !Properties.Settings.Default.count;
@@ -89,19 +129,32 @@ namespace Game_of_Life
             graphicsPanel1.Invalidate();
         }
 
+        /// <summary>
+        /// Function called by clicking the grid line menu button, toggles whether the grid lines are displayed or not.
+        /// Sets preference value for persistence, and sets whether the menu item is checked.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void toggleGridLines(object sender, EventArgs e)
         {
             Properties.Settings.Default.gridLines = !Properties.Settings.Default.gridLines;
+            gridToolStripMenuItem.Checked = Properties.Settings.Default.gridLines;
 
             Properties.Settings.Default.Save();
 
-            gridToolStripMenuItem.Checked = Properties.Settings.Default.gridLines;
+            
             
             this.gridLines = Properties.Settings.Default.gridLines;
 
             graphicsPanel1.Invalidate();
         }
 
+        /// <summary>
+        /// Function called by clicking the HUD menu button, toggles whether the HUD is displayed.
+        /// Sets preference value for persistence, and sets whether the menu item is checked.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void toggleHUD(object sender, EventArgs e)
         {
             Properties.Settings.Default.hud = !Properties.Settings.Default.hud;
@@ -115,49 +168,13 @@ namespace Game_of_Life
             graphicsPanel1.Invalidate();
         }
 
-        private void generateNextGeneration()
-        {
-            bool[,] scratchPad = new bool[this.universe_width, this.universe_height];
-            int tempAlive = 0;
-
-            for (int y = 0; y < universe.GetLength(1); y++)
-            {
-                for (int x = 0; x < universe.GetLength(0); x++)
-                {
-                    int neighbors = 0;
-
-                    if (this.boundaryMode == "Finite")
-                    {
-                        neighbors = finiteNeighbors(x, y);
-                    } else if (this.boundaryMode == "Toroidal")
-                    {
-                        neighbors = toroidalNeighbors(x, y);
-                    }
-
-                    if (neighbors < 2 && universe[x,y])
-                    {
-                        scratchPad[x, y] = false;
-                    } else if (neighbors > 3 && universe[x,y])
-                    {
-                        scratchPad[x, y] = false;
-                    } else if ((neighbors == 2 || neighbors == 3) && universe[x,y]) {
-                        scratchPad[x, y] = true;
-                    } else if (neighbors == 3 && !universe[x,y])
-                    {
-                        scratchPad[x, y] = true;
-                    }
-
-                    if (scratchPad[x, y]) tempAlive++;
-
-                }
-            }
-
-            universe = scratchPad;
-            aliveCellCount = tempAlive;
-
-            graphicsPanel1.Invalidate();
-        }
-
+        /// <summary>
+        /// Determine the number of living cells neighboring a cell based of the x and y coordinate in the universe.
+        /// The edge of the universe is considered dead with the function.
+        /// </summary>
+        /// <param name="x">The x value of the cell</param>
+        /// <param name="y">The y value of the cell</param>
+        /// <returns>the count of living cells neighboring the cell in question as an integer between 0 and 8</returns>
         private int finiteNeighbors(int x, int y)
         {
             int count = 0;
@@ -249,6 +266,13 @@ namespace Game_of_Life
             return count;
         }
 
+        /// <summary>
+        /// Determine the number of living cells neighboring a cell based of the x and y coordinate in the universe.
+        /// The edge of the universe wraps around to the other side of the universe, edges go to the opposite edge, corners go to the opposite corner across the universe.
+        /// </summary>
+        /// <param name="x">The x value of the cell</param>
+        /// <param name="y">The y value of the cell</param>
+        /// <returns>the count of living cells neighboring the cell in question as an integer between 0 and 8</returns>
         private int toroidalNeighbors(int x, int y)
         {
             int count = 0;
@@ -383,6 +407,10 @@ namespace Game_of_Life
             return count;
         }
 
+        /// <summary>
+        /// randomly generate universe using the seed member variable to seed the random number generator.
+        /// if the random number generated % 2 is 0, the cell is alive otherwise it is dead.
+        /// </summary>
         private void generateUniverse()
         {
             universe = new bool[this.universe_width, this.universe_height];
@@ -408,22 +436,9 @@ namespace Game_of_Life
             graphicsPanel1.Invalidate();
         }
 
-        private void setMenuMode()
-        {
-            if (this.boundaryMode == "Toroidal")
-            {
-                toroidalToolStripMenuItem.Checked = true;
-                finiteToolStripMenuItem.Checked = false;
-            }
-            else if (this.boundaryMode == "Finite")
-            {
-                finiteToolStripMenuItem.Checked = true;
-                toroidalToolStripMenuItem.Checked = false;
-            }
-
-            graphicsPanel1.Invalidate();
-        }
-
+        /// <summary>
+        /// set the boundary mode menu options checked values then cause the universe to be redrawn to account for the change in boundary behavior
+        /// </summary>
         private void setMode(object sender, EventArgs e)
         {
             ToolStripMenuItem clicked = (ToolStripMenuItem)sender;
@@ -432,17 +447,26 @@ namespace Game_of_Life
             {
                 Properties.Settings.Default.mode = "Toroidal";
                 this.boundaryMode = "Toroidal";
+                toroidalToolStripMenuItem.Checked = true;
+                finiteToolStripMenuItem.Checked = false;
             }
             else if (clicked.Equals(finiteToolStripMenuItem))
             {
                 Properties.Settings.Default.mode = "Finite";
                 this.boundaryMode = "Finite";
+                finiteToolStripMenuItem.Checked = true;
+                toroidalToolStripMenuItem.Checked = false;
             }
 
             Properties.Settings.Default.Save();
-            setMenuMode();
+            graphicsPanel1.Invalidate();
         }
 
+        /// <summary>
+        /// function called when menu color option items are clicked, updates the values of the specific color option and causes the redraw of the universe
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void cellColorMenuItem(object sender, EventArgs e)
         {
             ColorDialog cp = new ColorDialog();
@@ -473,6 +497,11 @@ namespace Game_of_Life
             }
         }
 
+        /// <summary>
+        /// Reset application to last saved settings.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void resetApplication(object sender, EventArgs e)
         {
             Properties.Settings.Default.Reset();
@@ -497,6 +526,8 @@ namespace Game_of_Life
             this.universe_height = Properties.Settings.Default.universe_height;
 
             this.boundaryMode = Properties.Settings.Default.mode;
+            toroidalToolStripMenuItem.Checked = (this.boundaryMode == "Toroidal");
+            finiteToolStripMenuItem.Checked = (this.boundaryMode == "Finite");
 
             this.seed = Properties.Settings.Default.seed;
 
@@ -504,11 +535,14 @@ namespace Game_of_Life
             this.backgroundColor = Properties.Settings.Default.backColor;
             this.gridColor = Properties.Settings.Default.gridColor;
 
-            setMenuMode();
-
             graphicsPanel1.Invalidate();
         }
 
+        /// <summary>
+        /// Clear universe, reset generations, and set alive count
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void clearUniverse(object sender, EventArgs e)
         {
             universe = new bool[this.universe_width, this.universe_height];
@@ -521,6 +555,11 @@ namespace Game_of_Life
             toolStripStatusLabelAlive.Text = "Alive: " + aliveCellCount;
         }
 
+        /// <summary>
+        /// Update seed from user imput in an instance of the Seed Modal, then generates the universe from the new seed.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void updateSeed(object sender, EventArgs e)
         {
             Seed updateSeed = new Seed();
@@ -539,6 +578,11 @@ namespace Game_of_Life
             }
         }
 
+        /// <summary>
+        /// Set seed based on current time, then generates the universe from the new time based seed.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void timeSeed(object sender, EventArgs e)
         {
             TimeSpan t = DateTime.UtcNow - new DateTime(1970, 1, 1);
@@ -557,11 +601,21 @@ namespace Game_of_Life
             generateUniverse();
         }
 
+        /// <summary>
+        /// Regenerates the universe based on the current seed.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void currentSeed(object sender, EventArgs e)
         {
             generateUniverse();
         }
 
+        /// <summary>
+        /// Open the options modal, save user input and then regenerate and redraw the universe.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void optionsMenuItem_click(object sender, EventArgs e)
         {
             OptionsModal optionsModal = new OptionsModal();
@@ -580,31 +634,69 @@ namespace Game_of_Life
                 this.universe_height = (int)optionsModal.universeHeight.Value;
 
                 Properties.Settings.Default.Save();
-                updateOptionValues();
+
+                universe = new bool[this.universe_width, this.universe_height];
+                setAliveCount();
+
+                timer.Interval = Properties.Settings.Default.interval;
+                toolStripStatusLabelInterval.Text = "Interval: " + Properties.Settings.Default.interval;
+
+                this.universe_width = Properties.Settings.Default.universe_width;
+                this.universe_height = Properties.Settings.Default.universe_height;
+
+                graphicsPanel1.Invalidate();
             }
 
 
         }
 
-        private void updateOptionValues()
-        {
-            universe = new bool[Properties.Settings.Default.universe_width, Properties.Settings.Default.universe_height];
-            setAliveCount();
-
-            timer.Interval = Properties.Settings.Default.interval;
-            toolStripStatusLabelInterval.Text = "Interval: " + Properties.Settings.Default.interval;
-
-            this.universe_width = Properties.Settings.Default.universe_width;
-            this.universe_height = Properties.Settings.Default.universe_height;
-
-            graphicsPanel1.Invalidate();
-        }
-
-        // Calculate the next generation of cells
+        /// <summary>
+        /// generate the next generation and update controls accordingly, cause universe to be redrawn.
+        /// </summary>
         private void NextGeneration()
         {
 
-            generateNextGeneration();
+            bool[,] scratchPad = new bool[this.universe_width, this.universe_height];
+            int tempAlive = 0;
+
+            for (int y = 0; y < universe.GetLength(1); y++)
+            {
+                for (int x = 0; x < universe.GetLength(0); x++)
+                {
+                    int neighbors = 0;
+
+                    if (this.boundaryMode == "Finite")
+                    {
+                        neighbors = finiteNeighbors(x, y);
+                    }
+                    else if (this.boundaryMode == "Toroidal")
+                    {
+                        neighbors = toroidalNeighbors(x, y);
+                    }
+
+                    if (neighbors < 2 && universe[x, y])
+                    {
+                        scratchPad[x, y] = false;
+                    }
+                    else if (neighbors > 3 && universe[x, y])
+                    {
+                        scratchPad[x, y] = false;
+                    }
+                    else if ((neighbors == 2 || neighbors == 3) && universe[x, y])
+                    {
+                        scratchPad[x, y] = true;
+                    }
+                    else if (neighbors == 3 && !universe[x, y])
+                    {
+                        scratchPad[x, y] = true;
+                    }
+
+                    if (scratchPad[x, y]) tempAlive++;
+
+                }
+            }
+
+            universe = scratchPad;
             setAliveCount();
 
             // Increment generation count
@@ -613,14 +705,25 @@ namespace Game_of_Life
             // Update status strip generations
             toolStripStatusLabelGenerations.Text = "Generations = " + generations.ToString();
             toolStripStatusLabelAlive.Text = "Alive: " + this.aliveCellCount.ToString();
+
+            //redraw universe
+            graphicsPanel1.Invalidate();
+            
         }
 
-        // The event called by the timer every Interval milliseconds.
+        /// <summary>
+        /// The event called by the timer every Interval milliseconds.
+        /// </summary>
         private void Timer_Tick(object sender, EventArgs e)
         {
             NextGeneration();
         }
 
+        /// <summary>
+        /// The function to draw the panel
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void graphicsPanel1_Paint(object sender, PaintEventArgs e)
         {
 
@@ -727,6 +830,9 @@ namespace Game_of_Life
             
         }
 
+        /// <summary>
+        /// update the alive count member variable, and the status bar alive count
+        /// </summary>
         private void setAliveCount()
         {
             int alive = 0; 
@@ -743,6 +849,11 @@ namespace Game_of_Life
             toolStripStatusLabelAlive.Text = "Alive: " + this.aliveCellCount;
         }
 
+        /// <summary>
+        /// Determine where the mouse was clicked, toggle that cell's alive status. Cause a repaint.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void graphicsPanel1_MouseClick(object sender, MouseEventArgs e)
         {
             // If the left mouse button was clicked
@@ -767,6 +878,11 @@ namespace Game_of_Life
             }
         }
 
+        /// <summary>
+        /// Handle the click of the run button, start the timer, activate the pause button, disable the next button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void runButtonClick(object sender, EventArgs e)
         {
             timer.Enabled = true;
@@ -775,6 +891,11 @@ namespace Game_of_Life
             Next.Enabled = false;
         }
 
+        /// <summary>
+        /// Handle the click of the pause button, pause the timer, activivate the run button, activate the next button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void pauseButtonClick(object sender, EventArgs e)
         {
             timer.Stop();
@@ -784,11 +905,21 @@ namespace Game_of_Life
             Next.Enabled = true;
         }
 
+        /// <summary>
+        /// handle the click of the next button, generate the next generation and repaint.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void nextButtonClick(object sender, EventArgs e)
         {
             NextGeneration();
         }
 
+        /// <summary>
+        /// Save universe to text file, alive cells = "0", dead cells = "."
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void saveUniverse(object sender, EventArgs e)
         {
 
@@ -816,6 +947,11 @@ namespace Game_of_Life
             }
         }
 
+        /// <summary>
+        /// open saved universe, set universe size to the size of the opened universe and set all cells to the values represented in the text file
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void openSavedUniverse(object sender, EventArgs e)
         {
             OpenFileDialog dlg = new OpenFileDialog();
@@ -865,6 +1001,13 @@ namespace Game_of_Life
             }
         }
 
+
+        /// <summary>
+        /// import a saved universe, keep size of universe the same as set by settings, center the imported universe and set all cells contained in the imported universe
+        /// to that of the text file
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void importUniverse(object sender, EventArgs e)
         {
             OpenFileDialog dlg = new OpenFileDialog();
@@ -914,6 +1057,11 @@ namespace Game_of_Life
             }
         }
 
+        /// <summary>
+        /// Make sure that all settings are saved on exit.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             Properties.Settings.Default.Save();

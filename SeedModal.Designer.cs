@@ -47,6 +47,7 @@
             // 
             // cancel
             // 
+            this.cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.cancel.Location = new System.Drawing.Point(230, 132);
             this.cancel.Name = "cancel";
             this.cancel.Size = new System.Drawing.Size(75, 23);
@@ -63,7 +64,6 @@
             this.label1.Size = new System.Drawing.Size(47, 20);
             this.label1.TabIndex = 2;
             this.label1.Text = "Seed";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // seedValue
             // 
@@ -77,7 +77,6 @@
             this.seedValue.Name = "seedValue";
             this.seedValue.Size = new System.Drawing.Size(120, 26);
             this.seedValue.TabIndex = 3;
-            this.seedValue.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
             // 
             // Seed
             // 

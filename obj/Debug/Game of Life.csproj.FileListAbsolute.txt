@@ -15,7 +15,6 @@ D:\Project and Portolio 1\Game of Life\bin\Debug\Game of Life.exe.config
 D:\Project and Portolio 1\Game of Life\bin\Debug\Game of Life.exe
 D:\Project and Portolio 1\Game of Life\bin\Debug\Game of Life.pdb
 D:\Project and Portolio 1\Game of Life\obj\Debug\Game of Life.csprojAssemblyReference.cache
-D:\Project and Portolio 1\Game of Life\obj\Debug\Game_of_Life.ColorPicker.resources
 D:\Project and Portolio 1\Game of Life\obj\Debug\Game_of_Life.Form1.resources
 D:\Project and Portolio 1\Game of Life\obj\Debug\Game_of_Life.OptionsModal.resources
 D:\Project and Portolio 1\Game of Life\obj\Debug\Game_of_Life.Properties.Resources.resources

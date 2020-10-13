@@ -79,6 +79,7 @@ namespace Game_of_Life
         public Form1()
         {
             InitializeComponent();
+
             Properties.Settings.Default.Reload();
 
             // Setup the timer
@@ -204,9 +205,22 @@ namespace Game_of_Life
         /// <param name="e"></param>
         private void cellColorMenuItem(object sender, EventArgs e)
         {
+            ToolStripMenuItem clicked = (ToolStripMenuItem)sender;
+
             ColorDialog cp = new ColorDialog();
 
-            ToolStripMenuItem clicked = (ToolStripMenuItem)sender;
+            if (clicked.Equals(backColorToolStripMenuItem))
+            {
+                cp.Color = this.backgroundColor;
+            }
+            else if (clicked.Equals(gridColorToolStripMenuItem))
+            {
+                cp.Color = this.gridColor;
+            }
+            else if (clicked.Equals(cellColorToolStripMenuItem))
+            {
+                cp.Color = this.aliveCellColor;
+            }
 
             if (DialogResult.OK == cp.ShowDialog())
             {
@@ -286,11 +300,7 @@ namespace Game_of_Life
         private void currentSeed(object sender, EventArgs e)
         {
             generateUniverse();
-        }
-
-
-        
-
+        }  
 
         /// <summary>
         /// randomly generate universe using the seed member variable to seed the random number generator.
@@ -773,6 +783,8 @@ namespace Game_of_Life
             SolidBrush aliveCell = new SolidBrush(Color.FromArgb(255 - aliveCellColor.R, 255 - aliveCellColor.G, 255 - aliveCellColor.B));
             SolidBrush deadCell = new SolidBrush(Color.FromArgb(255 - backgroundColor.R, 255 - backgroundColor.G, 255 - backgroundColor.B));
 
+            SolidBrush hudColor = new SolidBrush(Color.FromArgb(Math.Abs(175 - backgroundColor.R), Math.Abs(175 - backgroundColor.G), Math.Abs(175 - backgroundColor.B)));
+
             // Iterate through the universe in the y, top to bottom
             for (int y = 0; y < universe.GetLength(1); y++)
             {
@@ -845,9 +857,9 @@ namespace Game_of_Life
 
                 string hudString = "Timer Interval: " + timer.Interval + "\nGenerations: " + this.generations + "\nCells Alive: " + this.aliveCellCount + "\nBoundary Mode: " + this.boundaryMode + "\nUniverse:\n" + "  Width: " + this.universe_width + "\n  Height: " + this.universe_height;
 
-                Font hudFont = new Font("Sans Serif", 12f);
+                Font hudFont = new Font("Sans Serif", 12f, FontStyle.Bold);
 
-                e.Graphics.DrawString(hudString, hudFont, deadCell, hud);
+                e.Graphics.DrawString(hudString, hudFont, hudColor, hud);
             }
 
             // Cleaning up pens and brushes

@@ -80,8 +80,6 @@ namespace Game_of_Life
         {
             InitializeComponent();
 
-            Properties.Settings.Default.Reload();
-
             // Setup the timer
             timer.Interval = Properties.Settings.Default.interval; // milliseconds
             timer.Tick += Timer_Tick;
@@ -356,6 +354,43 @@ namespace Game_of_Life
         private void resetApplication(object sender, EventArgs e)
         {
             Properties.Settings.Default.Reset();
+
+            // Setup the timer
+            timer.Interval = Properties.Settings.Default.interval; // milliseconds
+            timer.Tick += Timer_Tick;
+
+            toolStripStatusLabelInterval.Text = "Interval: " + Properties.Settings.Default.interval;
+            toolStripStatusLabelSeed.Text = "Seed: " + Properties.Settings.Default.seed;
+
+            gridToolStripMenuItem.Checked = Properties.Settings.Default.gridLines;
+            this.gridLines = Properties.Settings.Default.gridLines;
+
+            neighborCountToolStripMenuItem.Checked = Properties.Settings.Default.count;
+            this.neighborCount = Properties.Settings.Default.count;
+
+            hudToolStripMenuItem.Checked = Properties.Settings.Default.hud;
+            this.hudVisible = Properties.Settings.Default.hud;
+
+            this.universe_width = Properties.Settings.Default.universe_width;
+            this.universe_height = Properties.Settings.Default.universe_height;
+
+            this.boundaryMode = Properties.Settings.Default.mode;
+            toroidalToolStripMenuItem.Checked = (this.boundaryMode == "Toroidal");
+            finiteToolStripMenuItem.Checked = (this.boundaryMode == "Finite");
+
+            this.seed = Properties.Settings.Default.seed;
+
+            this.aliveCellColor = Properties.Settings.Default.cellColor;
+            this.backgroundColor = Properties.Settings.Default.backColor;
+            this.gridColor = Properties.Settings.Default.gridColor;
+
+            graphicsPanel1.Invalidate();
+        }
+
+        
+        private void reloadSettings(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.Reload();
 
             // Setup the timer
             timer.Interval = Properties.Settings.Default.interval; // milliseconds

@@ -27,3 +27,19 @@ D:\Project and Portolio 1\Game of Life\bin\Debug\Game of Life.exe.manifest
 D:\Project and Portolio 1\Game of Life\bin\Debug\Game of Life.application
 D:\Project and Portolio 1\Game of Life\obj\Debug\Game of Life.exe.manifest
 D:\Project and Portolio 1\Game of Life\obj\Debug\Game of Life.application
+D:\Full Sail\Project and Portolio 1\Game of Life\bin\Debug\Game of Life.exe.config
+D:\Full Sail\Project and Portolio 1\Game of Life\bin\Debug\Game of Life.exe.manifest
+D:\Full Sail\Project and Portolio 1\Game of Life\bin\Debug\Game of Life.application
+D:\Full Sail\Project and Portolio 1\Game of Life\bin\Debug\Game of Life.exe
+D:\Full Sail\Project and Portolio 1\Game of Life\bin\Debug\Game of Life.pdb
+D:\Full Sail\Project and Portolio 1\Game of Life\obj\Debug\Game of Life.csprojAssemblyReference.cache
+D:\Full Sail\Project and Portolio 1\Game of Life\obj\Debug\Game_of_Life.Form1.resources
+D:\Full Sail\Project and Portolio 1\Game of Life\obj\Debug\Game_of_Life.OptionsModal.resources
+D:\Full Sail\Project and Portolio 1\Game of Life\obj\Debug\Game_of_Life.Properties.Resources.resources
+D:\Full Sail\Project and Portolio 1\Game of Life\obj\Debug\Game_of_Life.Seed.resources
+D:\Full Sail\Project and Portolio 1\Game of Life\obj\Debug\Game of Life.csproj.GenerateResource.cache
+D:\Full Sail\Project and Portolio 1\Game of Life\obj\Debug\Game of Life.csproj.CoreCompileInputs.cache
+D:\Full Sail\Project and Portolio 1\Game of Life\obj\Debug\Game of Life.exe.manifest
+D:\Full Sail\Project and Portolio 1\Game of Life\obj\Debug\Game of Life.application
+D:\Full Sail\Project and Portolio 1\Game of Life\obj\Debug\Game of Life.exe
+D:\Full Sail\Project and Portolio 1\Game of Life\obj\Debug\Game of Life.pdb

@@ -19,6 +19,22 @@ namespace Game_of_Life
     ///<summary>
     public partial class Form1 : Form
     {
+        class PreviousSettings {
+            public int interval { get; set; }
+            public int universe_width { get; set; }
+            public int universe_height { get; set; }
+            public int seed { get; set; }
+            public System.Drawing.Color cellColor { get; set; }
+            public System.Drawing.Color gridColor { get; set; }
+            public System.Drawing.Color backColor { get; set; }
+            public string mode { get; set; }
+            public bool count { get; set; }
+            public bool gridLine { get; set; }
+            public bool hud { get; set; }
+        }
+
+        PreviousSettings oldSettings;
+        
         /// <summary>
         /// The universe array that the paint function utilizes to display the game of life
         /// </summary>
@@ -79,33 +95,47 @@ namespace Game_of_Life
         public Form1()
         {
             InitializeComponent();
+            oldSettings = new PreviousSettings();
 
             // Setup the timer
             timer.Interval = Properties.Settings.Default.interval; // milliseconds
             timer.Tick += Timer_Tick;
+            oldSettings.interval = Properties.Settings.Default.interval;
+            toolStripStatusLabelInterval.Text = "Interval: " + Properties.Settings.Default.interval;
 
-            toolStripStatusLabelInterval.Text = "Interval: " + Properties.Settings.Default.interval; 
+            oldSettings.seed = Properties.Settings.Default.seed;
+            this.seed = Properties.Settings.Default.seed;
             toolStripStatusLabelSeed.Text = "Seed: " + Properties.Settings.Default.seed;
 
             gridToolStripMenuItem.Checked = Properties.Settings.Default.gridLines;
             this.gridLines = Properties.Settings.Default.gridLines;
+            oldSettings.gridLine = Properties.Settings.Default.gridLines;
 
             neighborCountToolStripMenuItem.Checked = Properties.Settings.Default.count;
             this.neighborCount = Properties.Settings.Default.count;
+            oldSettings.count = Properties.Settings.Default.count;
 
             hudToolStripMenuItem.Checked = Properties.Settings.Default.hud;
             this.hudVisible = Properties.Settings.Default.hud;
+            oldSettings.hud = Properties.Settings.Default.hud;
 
             this.universe_width = Properties.Settings.Default.universe_width;
+            oldSettings.universe_width = Properties.Settings.Default.universe_width;
+
             this.universe_height = Properties.Settings.Default.universe_height;
+            oldSettings.universe_height = Properties.Settings.Default.universe_height;
 
             this.boundaryMode = Properties.Settings.Default.mode;
-
-            this.seed = Properties.Settings.Default.seed;
+            oldSettings.mode = Properties.Settings.Default.mode;
 
             this.aliveCellColor = Properties.Settings.Default.cellColor;
+            oldSettings.cellColor = Properties.Settings.Default.cellColor;
+
             this.backgroundColor = Properties.Settings.Default.backColor;
+            oldSettings.backColor = Properties.Settings.Default.backColor;
+
             this.gridColor = Properties.Settings.Default.gridColor;
+            oldSettings.gridColor = Properties.Settings.Default.gridColor;
 
         }
 
@@ -117,14 +147,19 @@ namespace Game_of_Life
         /// <param name="e"></param>
         private void toggleNeighborCount(object sender, EventArgs e)
         {
+            //save the old setting
+            oldSettings.count = Properties.Settings.Default.count;
+
+            //toggle the setting
             Properties.Settings.Default.count = !Properties.Settings.Default.count;
-            
+            //update the checked value;
             neighborCountToolStripMenuItem.Checked = Properties.Settings.Default.count;
 
+            //update the member's value
             this.neighborCount = Properties.Settings.Default.count;
 
+            //save settings and redraw
             Properties.Settings.Default.Save();
-
             graphicsPanel1.Invalidate();
         }
 
@@ -136,15 +171,16 @@ namespace Game_of_Life
         /// <param name="e"></param>
         private void toggleGridLines(object sender, EventArgs e)
         {
+            //save old setting
+            oldSettings.gridLine = Properties.Settings.Default.gridLines;
+
+            //toggle the value
             Properties.Settings.Default.gridLines = !Properties.Settings.Default.gridLines;
             gridToolStripMenuItem.Checked = Properties.Settings.Default.gridLines;
-
-            Properties.Settings.Default.Save();
-
-            
-            
             this.gridLines = Properties.Settings.Default.gridLines;
 
+            //save settings and redraw
+            Properties.Settings.Default.Save();
             graphicsPanel1.Invalidate();
         }
 
@@ -156,14 +192,16 @@ namespace Game_of_Life
         /// <param name="e"></param>
         private void toggleHUD(object sender, EventArgs e)
         {
+            //save old value
+            oldSettings.hud = Properties.Settings.Default.hud;
+
+            //update value
             Properties.Settings.Default.hud = !Properties.Settings.Default.hud;
-
-            Properties.Settings.Default.Save();
-
             hudToolStripMenuItem.Checked = Properties.Settings.Default.hud;
-
             this.hudVisible = Properties.Settings.Default.hud;
 
+            //save and redraw
+            Properties.Settings.Default.Save();
             graphicsPanel1.Invalidate();
         }
 
@@ -173,6 +211,9 @@ namespace Game_of_Life
         /// </summary>
         private void setMode(object sender, EventArgs e)
         {
+            //save old value before updating
+            oldSettings.mode = Properties.Settings.Default.mode;
+
             ToolStripMenuItem clicked = (ToolStripMenuItem)sender;
 
             if (clicked.Equals(toroidalToolStripMenuItem))
@@ -224,16 +265,22 @@ namespace Game_of_Life
             {
                 if (clicked.Equals(backColorToolStripMenuItem))
                 {
+                    oldSettings.backColor = Properties.Settings.Default.backColor;
+
                     Properties.Settings.Default.backColor = cp.Color;
                     this.backgroundColor = cp.Color;
                 }
                 else if (clicked.Equals(gridColorToolStripMenuItem))
                 {
+                    oldSettings.gridColor = Properties.Settings.Default.gridColor;
+
                     Properties.Settings.Default.gridColor = cp.Color;
                     this.gridColor = cp.Color;
                 }
                 else if (clicked.Equals(cellColorToolStripMenuItem))
                 {
+                    oldSettings.cellColor = Properties.Settings.Default.cellColor;
+
                     Properties.Settings.Default.cellColor = cp.Color;
                     this.aliveCellColor = cp.Color;
                 }
@@ -256,6 +303,8 @@ namespace Game_of_Life
 
             if (DialogResult.OK == updateSeed.ShowDialog())
             {
+                oldSettings.seed = Properties.Settings.Default.seed;
+
                 Properties.Settings.Default.seed = (int)updateSeed.seedValue.Value;
                 this.seed = (int)updateSeed.seedValue.Value;
 
@@ -274,6 +323,8 @@ namespace Game_of_Life
         /// <param name="e"></param>
         private void timeSeed(object sender, EventArgs e)
         {
+            oldSettings.seed = Properties.Settings.Default.seed;
+
             TimeSpan t = DateTime.UtcNow - new DateTime(1970, 1, 1);
             int secondsSinceEpoch = (int)t.TotalSeconds;
 
@@ -390,7 +441,18 @@ namespace Game_of_Life
         
         private void reloadSettings(object sender, EventArgs e)
         {
-            Properties.Settings.Default.Reload();
+            //set all settings to the value in oldSettings
+            Properties.Settings.Default.interval = oldSettings.interval;
+            Properties.Settings.Default.universe_width = oldSettings.universe_width;
+            Properties.Settings.Default.universe_height = oldSettings.universe_height;
+            Properties.Settings.Default.seed = oldSettings.seed;
+            Properties.Settings.Default.cellColor = oldSettings.cellColor;
+            Properties.Settings.Default.gridColor = oldSettings.gridColor;
+            Properties.Settings.Default.backColor = oldSettings.backColor;
+            Properties.Settings.Default.mode = oldSettings.mode;
+            Properties.Settings.Default.count = oldSettings.count;
+            Properties.Settings.Default.gridLines = oldSettings.gridLine;
+            Properties.Settings.Default.hud = oldSettings.hud;
 
             // Setup the timer
             timer.Interval = Properties.Settings.Default.interval; // milliseconds
@@ -439,6 +501,11 @@ namespace Game_of_Life
 
             if (DialogResult.OK == optionsModal.ShowDialog())
             {
+
+                oldSettings.interval = Properties.Settings.Default.interval;
+                oldSettings.universe_width = Properties.Settings.Default.universe_width;
+                oldSettings.universe_height = Properties.Settings.Default.universe_height;
+
                 Properties.Settings.Default.interval = (int)optionsModal.interval.Value;
                 Properties.Settings.Default.universe_width = (int)optionsModal.universeWidth.Value;
                 Properties.Settings.Default.universe_height = (int)optionsModal.universeHeight.Value;

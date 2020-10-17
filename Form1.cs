@@ -108,14 +108,19 @@ namespace Game_of_Life
             toolStripStatusLabelSeed.Text = "Seed: " + Properties.Settings.Default.seed;
 
             gridToolStripMenuItem.Checked = Properties.Settings.Default.gridLines;
+            gridLinesToolStripMenuItem.Checked = Properties.Settings.Default.gridLines;
             this.gridLines = Properties.Settings.Default.gridLines;
             oldSettings.gridLine = Properties.Settings.Default.gridLines;
 
             neighborCountToolStripMenuItem.Checked = Properties.Settings.Default.count;
+            neighborCountsToolStripMenuItem.Checked = Properties.Settings.Default.count;
+
             this.neighborCount = Properties.Settings.Default.count;
             oldSettings.count = Properties.Settings.Default.count;
 
             hudToolStripMenuItem.Checked = Properties.Settings.Default.hud;
+            hUDToolStripMenuItem1.Checked = Properties.Settings.Default.hud;
+
             this.hudVisible = Properties.Settings.Default.hud;
             oldSettings.hud = Properties.Settings.Default.hud;
 
@@ -125,6 +130,13 @@ namespace Game_of_Life
             this.universe_height = Properties.Settings.Default.universe_height;
             oldSettings.universe_height = Properties.Settings.Default.universe_height;
 
+            if (Properties.Settings.Default.mode == "Toroidal")
+            {
+                toroidalToolStripMenuItem.Checked = true;
+            } else if (Properties.Settings.Default.mode == "Finite")
+            {
+                finiteToolStripMenuItem.Checked = true;
+            }
             this.boundaryMode = Properties.Settings.Default.mode;
             oldSettings.mode = Properties.Settings.Default.mode;
 
@@ -154,6 +166,7 @@ namespace Game_of_Life
             Properties.Settings.Default.count = !Properties.Settings.Default.count;
             //update the checked value;
             neighborCountToolStripMenuItem.Checked = Properties.Settings.Default.count;
+            neighborCountsToolStripMenuItem.Checked = Properties.Settings.Default.count;
 
             //update the member's value
             this.neighborCount = Properties.Settings.Default.count;
@@ -177,6 +190,8 @@ namespace Game_of_Life
             //toggle the value
             Properties.Settings.Default.gridLines = !Properties.Settings.Default.gridLines;
             gridToolStripMenuItem.Checked = Properties.Settings.Default.gridLines;
+            gridLinesToolStripMenuItem.Checked = Properties.Settings.Default.gridLines;
+
             this.gridLines = Properties.Settings.Default.gridLines;
 
             //save settings and redraw
@@ -198,6 +213,7 @@ namespace Game_of_Life
             //update value
             Properties.Settings.Default.hud = !Properties.Settings.Default.hud;
             hudToolStripMenuItem.Checked = Properties.Settings.Default.hud;
+            hUDToolStripMenuItem1.Checked = Properties.Settings.Default.hud;
             this.hudVisible = Properties.Settings.Default.hud;
 
             //save and redraw
@@ -248,36 +264,36 @@ namespace Game_of_Life
 
             ColorDialog cp = new ColorDialog();
 
-            if (clicked.Equals(backColorToolStripMenuItem))
+            if (clicked.Equals(backColorToolStripMenuItem) || clicked.Equals(backgroundColorToolStripMenuItem))
             {
                 cp.Color = this.backgroundColor;
             }
-            else if (clicked.Equals(gridColorToolStripMenuItem))
+            else if (clicked.Equals(gridColorToolStripMenuItem) || clicked.Equals(gridColorToolStripMenuItem1))
             {
                 cp.Color = this.gridColor;
             }
-            else if (clicked.Equals(cellColorToolStripMenuItem))
+            else if (clicked.Equals(cellColorToolStripMenuItem) || clicked.Equals(cellColorToolStripMenuItem1))
             {
                 cp.Color = this.aliveCellColor;
             }
 
             if (DialogResult.OK == cp.ShowDialog())
             {
-                if (clicked.Equals(backColorToolStripMenuItem))
+                if (clicked.Equals(backColorToolStripMenuItem) || clicked.Equals(backgroundColorToolStripMenuItem))
                 {
                     oldSettings.backColor = Properties.Settings.Default.backColor;
 
                     Properties.Settings.Default.backColor = cp.Color;
                     this.backgroundColor = cp.Color;
                 }
-                else if (clicked.Equals(gridColorToolStripMenuItem))
+                else if (clicked.Equals(gridColorToolStripMenuItem) || clicked.Equals(gridColorToolStripMenuItem1))
                 {
                     oldSettings.gridColor = Properties.Settings.Default.gridColor;
 
                     Properties.Settings.Default.gridColor = cp.Color;
                     this.gridColor = cp.Color;
                 }
-                else if (clicked.Equals(cellColorToolStripMenuItem))
+                else if (clicked.Equals(cellColorToolStripMenuItem) || clicked.Equals(cellColorToolStripMenuItem1))
                 {
                     oldSettings.cellColor = Properties.Settings.Default.cellColor;
 
@@ -998,6 +1014,10 @@ namespace Game_of_Life
 
                 // Tell Windows you need to repaint
                 graphicsPanel1.Invalidate();
+            } else if (e.Button == MouseButtons.Right)
+            {
+                contextMenuStrip1.Show(this, new Point(e.X, e.Y));
+                
             }
         }
 

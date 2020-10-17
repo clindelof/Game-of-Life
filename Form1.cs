@@ -11,6 +11,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml;
 
 namespace Game_of_Life
 {
@@ -626,61 +627,60 @@ namespace Game_of_Life
         {
             int count = 0;
 
-            if (y == 0)
+            if (y == 0) //top row edge case
             {
-                if (x == 0)
+                if (x == 0) //far left edge case
                 {
 
                     if (universe[x + 1, y]) count++; //right
                     if (universe[x + 1, y + 1]) count++; //bottom right
                     if (universe[x, y + 1]) count++; //bottom
                 }
-                else if (x > 0 && x < universe.GetLength(0))
+                else if (x > 0 && x < universe.GetLength(0) - 1) //anything in the middle
                 {
 
-                    if (universe[x - 1, y]) count++; //left
-                    if (universe[x - 1, y + 1]) count++; //bottom right
-                    if (universe[x, y + 1]) count++; //bottom
-                }
-                else
-                {
                     if (universe[x - 1, y]) count++; //left
                     if (universe[x + 1, y]) count++; //right
+                    if (universe[x + 1, y + 1]) count++; //bottom right
                     if (universe[x - 1, y + 1]) count++; //bottom left
                     if (universe[x, y + 1]) count++; //bottom
-                    if (universe[x + 1, y + 1]) count++; //bottom right;
+                }
+                else //far right edge case
+                {
+                    if (universe[x - 1, y]) count++; //left
+                    if (universe[x - 1, y + 1]) count++; //bottom left
+                    if (universe[x, y + 1]) count++; //bottom
                 }
             }
-            else if (y == universe.GetLength(1) - 1)
+            else if (y == universe.GetLength(1) - 1) //bottom row edge case
             {
-
-                if (x == 0)
+                if (x == 0) //far left edge case
                 {
 
                     if (universe[x + 1, y]) count++; //right
                     if (universe[x + 1, y - 1]) count++; //upper right
                     if (universe[x, y - 1]) count++; //top
                 }
-                else if (x > 0 && x < universe.GetLength(0))
+                else if (x > 0 && x < universe.GetLength(0) - 1) //anything in the middle
                 {
 
                     if (universe[x - 1, y]) count++; //left
+                    if (universe[x + 1, y]) count++; //right
                     if (universe[x - 1, y - 1]) count++; //upper left
+                    if (universe[x + 1, y - 1]) count++; //upper right
                     if (universe[x, y - 1]) count++; //top
 
                 }
                 else
                 {
                     if (universe[x - 1, y]) count++; //left
-                    if (universe[x + 1, y]) count++; //right
                     if (universe[x - 1, y - 1]) count++; //top left
                     if (universe[x, y - 1]) count++; //top
-                    if (universe[x + 1, y - 1]) count++; //top right;
                 }
             }
-            else
+            else // any y in the middle of the rows
             {
-                if (x == 0)
+                if (x == 0) // far left edge case
                 {
                     if (universe[x, y - 1]) count++; //upper
                     if (universe[x + 1, y - 1]) count++; //upper right
@@ -688,26 +688,27 @@ namespace Game_of_Life
                     if (universe[x + 1, y + 1]) count++; //bottom right
                     if (universe[x, y + 1]) count++; //bottom
                 }
-                else if (x > 0 && x < universe.GetLength(0))
+                else if (x > 0 && x < universe.GetLength(0) - 1) //anything in the middle of the grid
                 {
 
                     if (universe[x, y - 1]) count++; //upper
                     if (universe[x - 1, y - 1]) count++; //upper left
+                    if (universe[x + 1, y - 1]) count++; //upper right
                     if (universe[x - 1, y]) count++; //left
+                    if (universe[x + 1, y]) count++; //right
                     if (universe[x - 1, y + 1]) count++; //bottom left
+                    if (universe[x + 1, y + 1]) count++; //bottom right
                     if (universe[x, y + 1]) count++; //bottom
 
                 }
                 else
                 {
                     if (universe[x, y - 1]) count++; //upper
-                    if (universe[x + 1, y - 1]) count++; //upper right
-                    if (universe[x + 1, y]) count++; //right
-                    if (universe[x + 1, y + 1]) count++; //bottom right
-                    if (universe[x, y + 1]) count++; //bottom
-                    if (universe[x - 1, y + 1]) count++; //bottom left
-                    if (universe[x - 1, y]) count++; //left
                     if (universe[x - 1, y - 1]) count++; //upper left
+                    if (universe[x - 1, y]) count++; //left
+                    if (universe[x - 1, y + 1]) count++; //bottom left
+                    if (universe[x, y + 1]) count++; //bottom
+
                 }
             }
 
